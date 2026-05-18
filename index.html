@@ -10,764 +10,169 @@
 <title>HYROX Race Prep</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #13131a;
-    --surface2: #1c1c26;
-    --border: #2a2a3a;
-    --accent: #e8ff47;
-    --accent2: #47b8ff;
-    --accent3: #ff6b47;
-    --text: #f0f0f8;
-    --muted: #6b6b8a;
-    --safe-top: env(safe-area-inset-top, 0px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-  body {
-    font-family: 'Barlow', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-    overflow-x: hidden;
-  }
-
-  /* NAV */
-  .nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: rgba(10,10,15,0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    padding-top: var(--safe-top);
-  }
-
-  .nav-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 20px;
-  }
-
-  .nav-logo {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 22px;
-    letter-spacing: 0.05em;
-    color: var(--accent);
-  }
-
-  .nav-logo span { color: var(--text); }
-
-  .nav-race {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 600;
-    font-size: 13px;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .nav-race strong {
-    color: var(--accent3);
-    font-weight: 800;
-  }
-
-  /* TABS */
-  .tabs {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: rgba(10,10,15,0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid var(--border);
-    padding-bottom: var(--safe-bottom);
-    display: flex;
-  }
-
-  .tab {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 10px 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
-    background: none;
-    color: var(--muted);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .tab.active { color: var(--accent); }
-  .tab-icon { font-size: 20px; line-height: 1; }
-
-  /* MAIN CONTENT */
-  .main {
-    padding-top: calc(var(--safe-top) + 60px);
-    padding-bottom: calc(var(--safe-bottom) + 70px);
-  }
-
-  /* PAGES */
-  .page { display: none; }
-  .page.active { display: block; }
-
-  /* SCHEDULE PAGE */
-  .schedule-header {
-    padding: 24px 20px 16px;
-  }
-
-  .page-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 36px;
-    letter-spacing: 0.02em;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .page-subtitle {
-    font-size: 13px;
-    color: var(--muted);
-    font-weight: 400;
-  }
-
-  .week-block {
-    margin-bottom: 8px;
-  }
-
-  .week-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    padding: 16px 20px 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .week-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .session-card {
-    margin: 0 12px 6px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    cursor: pointer;
-    transition: all 0.15s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .session-card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    border-radius: 3px 0 0 3px;
-  }
-
-  .session-card.hyrox::before { background: var(--accent); }
-  .session-card.run::before { background: var(--accent2); }
-  .session-card.strength::before { background: var(--accent3); }
-  .session-card.rest::before { background: var(--border); }
-
-  .session-card:active { transform: scale(0.98); }
-  .session-card.done { opacity: 0.5; }
-  .session-card.done .session-name { text-decoration: line-through; }
-
-  .session-dot {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-
-  .session-dot.hyrox { background: rgba(232,255,71,0.1); }
-  .session-dot.run { background: rgba(71,184,255,0.1); }
-  .session-dot.strength { background: rgba(255,107,71,0.1); }
-  .session-dot.rest { background: rgba(107,107,138,0.1); }
-
-  .session-info { flex: 1; min-width: 0; }
-
-  .session-day {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 2px;
-  }
-
-  .session-name {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 17px;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .session-meta {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-
-  .session-check {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    border: 2px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.2s;
-    font-size: 14px;
-    cursor: pointer;
-    background: transparent;
-    color: transparent;
-  }
-
-  .session-card.done .session-check {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--bg);
-  }
-
-  /* PROGRESS BAR */
-  .progress-bar-wrap {
-    margin: 0 12px 16px;
-    background: var(--surface);
-    border-radius: 10px;
-    padding: 14px 16px;
-    border: 1px solid var(--border);
-  }
-
-  .progress-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-
-  .progress-label-text {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .progress-count {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800;
-    font-size: 18px;
-    color: var(--accent);
-  }
-
-  .progress-track {
-    height: 6px;
-    background: var(--border);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 3px;
-    transition: width 0.4s ease;
-  }
-
-  /* SESSION DETAIL MODAL */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
-
-  .modal-overlay.open { display: flex; align-items: flex-end; }
-
-  .modal {
-    width: 100%;
-    max-height: 88vh;
-    background: var(--surface);
-    border-radius: 20px 20px 0 0;
-    border: 1px solid var(--border);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-  }
-
-  .modal-handle {
-    width: 36px;
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    margin: 12px auto 0;
-    flex-shrink: 0;
-  }
-
-  .modal-header {
-    padding: 16px 20px 14px;
-    flex-shrink: 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .modal-type {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-
-  .modal-type.hyrox { color: var(--accent); }
-  .modal-type.run { color: var(--accent2); }
-  .modal-type.strength { color: var(--accent3); }
-
-  .modal-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 28px;
-    letter-spacing: 0.02em;
-    line-height: 1.1;
-    margin-bottom: 8px;
-  }
-
-  .modal-chips {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .chip {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 6px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-  }
-
-  .modal-body {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 16px 20px;
-    flex: 1;
-    padding-bottom: calc(var(--safe-bottom) + 20px);
-  }
-
-  .modal-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-  }
-
-  /* SESSION CONTENT SECTIONS */
-  .section {
-    margin-bottom: 20px;
-  }
-
-  .section-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800;
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .block-item {
-    background: var(--surface2);
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-bottom: 6px;
-    border: 1px solid var(--border);
-  }
-
-  .block-item-main {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    letter-spacing: 0.02em;
-    margin-bottom: 2px;
-  }
-
-  .block-item-sub {
-    font-size: 13px;
-    color: var(--muted);
-    font-weight: 400;
-  }
-
-  .coaching-item {
-    display: flex;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--text);
-    font-weight: 300;
-  }
-
-  .coaching-item:last-child { border-bottom: none; }
-
-  .coaching-arrow {
-    color: var(--accent);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  .rpe-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 6px 12px;
-    margin-bottom: 14px;
-  }
-
-  .rpe-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .rpe-dots {
-    display: flex;
-    gap: 3px;
-  }
-
-  .rpe-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--border);
-  }
-
-  .rpe-dot.filled { background: var(--accent); }
-
-  /* SESSIONS LIST PAGE */
-  .sessions-grid {
-    padding: 0 12px;
-  }
-
-  .session-type-header {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 20px 8px 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .session-type-header::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .session-type-header.hyrox { color: var(--accent); }
-  .session-type-header.run { color: var(--accent2); }
-  .session-type-header.strength { color: var(--accent3); }
-
-  .session-list-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 8px;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .session-list-card:active { transform: scale(0.98); }
-
-  .session-num {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 28px;
-    line-height: 1;
-    width: 36px;
-    text-align: center;
-    flex-shrink: 0;
-  }
-
-  .session-num.hyrox { color: var(--accent); }
-  .session-num.run { color: var(--accent2); }
-  .session-num.strength { color: var(--accent3); }
-
-  .session-list-info { flex: 1; }
-
-  .session-list-name {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 18px;
-    letter-spacing: 0.02em;
-    margin-bottom: 2px;
-  }
-
-  .session-list-theme {
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .chevron { color: var(--muted); font-size: 18px; }
-
-  /* RACE PAGE */
-  .race-page { padding: 24px 20px; }
-
-  .race-countdown {
-    background: linear-gradient(135deg, rgba(232,255,71,0.08), rgba(71,184,255,0.08));
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    text-align: center;
-    margin-bottom: 20px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .race-countdown::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    background: linear-gradient(135deg, rgba(232,255,71,0.2), transparent, rgba(71,184,255,0.2));
-    border-radius: 16px;
-    z-index: 0;
-    opacity: 0.3;
-  }
-
-  .countdown-number {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 80px;
-    line-height: 1;
-    color: var(--accent);
-    position: relative;
-  }
-
-  .countdown-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-top: 4px;
-    position: relative;
-  }
-
-  .countdown-date {
-    font-size: 14px;
-    color: var(--muted);
-    margin-top: 12px;
-    position: relative;
-  }
-
-  .targets-list { margin-top: 20px; }
-
-  .target-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .target-icon { font-size: 22px; flex-shrink: 0; }
-
-  .target-text { flex: 1; }
-  .target-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    margin-bottom: 2px;
-  }
-
-  .target-desc { font-size: 12px; color: var(--muted); }
-
-  .race-order-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    margin-top: 20px;
-  }
-
-  .race-order-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800;
-    font-size: 13px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
-
-  .race-order-items {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .race-order-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .order-num {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 13px;
-    color: var(--accent);
-    width: 20px;
-    flex-shrink: 0;
-  }
-
-  .order-station {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    flex: 1;
-  }
-
-  .order-connector {
-    width: 1px;
-    height: 12px;
-    background: var(--border);
-    margin-left: 10px;
-    margin-top: -4px;
-    margin-bottom: -4px;
-  }
-
-  /* KEY NUMBERS */
-  .key-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px;
-  }
-
-  .stat-value {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 28px;
-    color: var(--accent);
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .stat-label {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 400;
-  }
-
-  /* PAGE HEADER */
-  .page-header { padding: 24px 20px 12px; }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 0; }
+:root {
+  --bg: #0a0a0f;
+  --surface: #13131a;
+  --surface2: #1c1c26;
+  --border: #2a2a3a;
+  --accent: #e8ff47;
+  --accent2: #47b8ff;
+  --accent3: #ff6b47;
+  --accent4: #b847ff;
+  --text: #f0f0f8;
+  --muted: #6b6b8a;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Barlow',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+
+/* NAV */
+.nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,10,15,0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding-top:var(--safe-top); }
+.nav-inner { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; }
+.nav-logo { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:22px; letter-spacing:0.05em; color:var(--accent); }
+.nav-logo span { color:var(--text); }
+.nav-race { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:13px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
+.nav-race strong { color:var(--accent3); font-weight:800; }
+
+/* TABS */
+.tabs { position:fixed; bottom:0; left:0; right:0; z-index:100; background:rgba(10,10,15,0.97); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-top:1px solid var(--border); padding-bottom:var(--safe-bottom); display:flex; }
+.tab { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; padding:10px 4px; cursor:pointer; border:none; background:none; color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; transition:color 0.2s; }
+.tab.active { color:var(--accent); }
+.tab-icon { font-size:18px; line-height:1; }
+
+/* MAIN */
+.main { padding-top:calc(var(--safe-top) + 60px); padding-bottom:calc(var(--safe-bottom) + 70px); }
+.page { display:none; }
+.page.active { display:block; }
+
+/* PROGRESS */
+.progress-wrap { margin:0 12px 6px; background:var(--surface); border-radius:12px; padding:14px 16px; border:1px solid var(--border); }
+.progress-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.progress-title { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); }
+.progress-count { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:20px; color:var(--accent); }
+.progress-track { height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:3px; transition:width 0.4s ease; }
+
+/* WEEK */
+.week-label { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); padding:16px 20px 8px; display:flex; align-items:center; gap:10px; }
+.week-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* SESSION CARD */
+.session-card { margin:0 12px 6px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:transform 0.15s; position:relative; overflow:hidden; }
+.session-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; }
+.session-card.hyrox::before { background:var(--accent); }
+.session-card.run::before { background:var(--accent2); }
+.session-card.strength::before { background:var(--accent3); }
+.session-card.rest::before { background:var(--border); }
+.session-card.race::before { background:linear-gradient(180deg,var(--accent),var(--accent3)); }
+.session-card:active { transform:scale(0.98); }
+.session-card.done { opacity:0.45; }
+.session-card.done .s-name { text-decoration:line-through; }
+
+.s-dot { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.s-dot.hyrox { background:rgba(232,255,71,0.1); }
+.s-dot.run { background:rgba(71,184,255,0.1); }
+.s-dot.strength { background:rgba(255,107,71,0.1); }
+.s-dot.rest { background:rgba(107,107,138,0.1); }
+.s-dot.race { background:rgba(232,255,71,0.15); }
+
+.s-info { flex:1; min-width:0; }
+.s-day { font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:2px; }
+.s-name { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:17px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.s-meta { font-size:12px; color:var(--muted); margin-top:2px; }
+
+.s-check { width:26px; height:26px; border-radius:7px; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px; cursor:pointer; background:transparent; color:transparent; transition:all 0.2s; }
+.session-card.done .s-check { background:var(--accent); border-color:var(--accent); color:var(--bg); }
+
+/* MODAL */
+.modal-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
+.modal-overlay.open { display:flex; align-items:flex-end; }
+.modal { width:100%; max-height:90vh; background:var(--surface); border-radius:20px 20px 0 0; border:1px solid var(--border); overflow:hidden; display:flex; flex-direction:column; animation:slideUp 0.28s cubic-bezier(0.34,1.4,0.64,1); }
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.modal-handle { width:36px; height:4px; background:var(--border); border-radius:2px; margin:12px auto 0; flex-shrink:0; }
+.modal-header { padding:16px 20px 14px; flex-shrink:0; border-bottom:1px solid var(--border); position:relative; }
+.modal-close { position:absolute; top:14px; right:16px; width:30px; height:30px; border-radius:50%; background:var(--surface2); border:1px solid var(--border); color:var(--muted); font-size:14px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.modal-type { font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:4px; }
+.modal-type.hyrox { color:var(--accent); }
+.modal-type.run { color:var(--accent2); }
+.modal-type.strength { color:var(--accent3); }
+.modal-title { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:26px; letter-spacing:0.02em; line-height:1.1; margin-bottom:8px; }
+.modal-chips { display:flex; gap:6px; flex-wrap:wrap; }
+.chip { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:4px 9px; border-radius:6px; background:var(--surface2); border:1px solid var(--border); color:var(--muted); }
+.modal-body { overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px 20px; flex:1; padding-bottom:calc(var(--safe-bottom) + 24px); }
+
+/* MODAL CONTENT */
+.sec-label { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; margin-top:18px; display:flex; align-items:center; gap:8px; }
+.sec-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.sec-label:first-child { margin-top:0; }
+.block-item { background:var(--surface2); border-radius:10px; padding:11px 14px; margin-bottom:5px; border:1px solid var(--border); }
+.block-main { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:16px; margin-bottom:2px; }
+.block-sub { font-size:13px; color:var(--muted); line-height:1.45; }
+.block-rest { font-size:12px; color:var(--accent3); margin-top:4px; font-weight:600; }
+.coaching-item { display:flex; gap:10px; padding:9px 0; border-bottom:1px solid var(--border); font-size:13px; line-height:1.5; color:var(--text); font-weight:300; }
+.coaching-item:last-child { border-bottom:none; }
+.coaching-arrow { color:var(--accent); font-family:'Barlow Condensed',sans-serif; font-weight:800; flex-shrink:0; }
+.athlete-tag { display:inline-block; font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent2); background:rgba(71,184,255,0.1); border:1px solid rgba(71,184,255,0.2); border-radius:4px; padding:2px 6px; margin-bottom:6px; }
+.rpe-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:8px 12px; }
+.rpe-lbl { font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
+.rpe-dots { display:flex; gap:3px; }
+.rpe-dot { width:8px; height:8px; border-radius:50%; background:var(--border); }
+.rpe-dot.on { background:var(--accent); }
+.rpe-num { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:18px; color:var(--accent); margin-left:auto; }
+.flex-rest-note { background:rgba(255,107,71,0.08); border:1px solid rgba(255,107,71,0.2); border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:13px; color:var(--accent3); line-height:1.5; }
+
+/* SESSIONS LIST */
+.page-header { padding:24px 20px 12px; }
+.page-title { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:36px; letter-spacing:0.02em; line-height:1; margin-bottom:4px; }
+.page-sub { font-size:13px; color:var(--muted); }
+.cat-header { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; padding:18px 20px 8px; display:flex; align-items:center; gap:10px; }
+.cat-header::after { content:''; flex:1; height:1px; background:var(--border); }
+.cat-header.hyrox { color:var(--accent); }
+.cat-header.run { color:var(--accent2); }
+.cat-header.strength { color:var(--accent3); }
+.cat-header.extra { color:var(--accent4); }
+.s-list-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:13px 16px; margin:0 12px 7px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:transform 0.15s; }
+.s-list-card:active { transform:scale(0.98); }
+.s-num { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:26px; line-height:1; width:34px; text-align:center; flex-shrink:0; }
+.s-num.hyrox { color:var(--accent); }
+.s-num.run { color:var(--accent2); }
+.s-num.strength { color:var(--accent3); }
+.s-num.extra { color:var(--accent4); }
+.s-list-info { flex:1; }
+.s-list-name { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:17px; margin-bottom:2px; }
+.s-list-theme { font-size:12px; color:var(--muted); }
+.chevron { color:var(--muted); font-size:18px; }
+
+/* RACE PAGE */
+.race-pg { padding:20px; }
+.countdown-card { background:linear-gradient(135deg,rgba(232,255,71,0.07),rgba(71,184,255,0.07)); border:1px solid var(--border); border-radius:16px; padding:24px; text-align:center; margin-bottom:16px; }
+.cd-num { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:84px; line-height:1; color:var(--accent); }
+.cd-lbl { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-top:2px; }
+.cd-date { font-size:13px; color:var(--muted); margin-top:10px; }
+.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+.stat-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px; }
+.stat-val { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:26px; color:var(--accent); line-height:1; margin-bottom:3px; }
+.stat-lbl { font-size:12px; color:var(--muted); }
+.section-title { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:12px; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; margin-top:20px; }
+.target-item { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:13px 15px; margin-bottom:7px; display:flex; align-items:center; gap:12px; }
+.t-icon { font-size:20px; flex-shrink:0; }
+.t-title { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:16px; margin-bottom:2px; }
+.t-desc { font-size:12px; color:var(--muted); }
+.order-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px; margin-top:16px; }
+.order-row { display:flex; align-items:center; gap:10px; padding:5px 0; }
+.order-n { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:13px; color:var(--accent); width:18px; flex-shrink:0; }
+.order-s { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:16px; flex:1; }
+.order-line { width:1px; height:10px; background:var(--border); margin-left:9px; }
+
+/* ATHLETE SOURCES PAGE */
+.athlete-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; margin:0 12px 8px; }
+.ath-name { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:20px; color:var(--accent); margin-bottom:2px; }
+.ath-title { font-size:12px; color:var(--muted); margin-bottom:10px; }
+.ath-principle { font-size:13px; color:var(--text); line-height:1.55; font-weight:300; }
+.ath-principle + .ath-principle { margin-top:6px; border-top:1px solid var(--border); padding-top:6px; }
+
+::-webkit-scrollbar { width:0; }
 </style>
 </head>
 <body>
@@ -775,922 +180,764 @@
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-logo">HY<span>ROX</span></div>
-    <div class="nav-race">Race Day <strong>1 JUL</strong></div>
+    <div class="nav-race">Race Day <strong>1 JUL 2026</strong></div>
   </div>
 </nav>
 
 <main class="main">
 
-  <!-- SCHEDULE PAGE -->
+  <!-- SCHEDULE -->
   <div class="page active" id="page-schedule">
-    <div class="schedule-header">
+    <div style="padding:20px 20px 12px">
       <div class="page-title">SCHEDULE</div>
-      <div class="page-subtitle">6 weeks · 24 sessions · Race day 1 July</div>
+      <div class="page-sub">6 weeks · 36 sessions · Race day 1 July</div>
     </div>
-
-    <div style="padding: 0 12px; margin-bottom: 4px;">
-      <div class="progress-bar-wrap">
-        <div class="progress-label">
-          <span class="progress-label-text">Sessions Complete</span>
-          <span class="progress-count" id="progress-count">0 / 24</span>
+    <div style="padding:0 12px;margin-bottom:4px">
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span class="progress-title">Sessions Complete</span>
+          <span class="progress-count" id="prog-count">0 / 36</span>
         </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-        </div>
+        <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
       </div>
     </div>
-
     <div id="schedule-list"></div>
   </div>
 
-  <!-- SESSIONS PAGE -->
+  <!-- SESSIONS -->
   <div class="page" id="page-sessions">
     <div class="page-header">
       <div class="page-title">SESSIONS</div>
-      <div class="page-subtitle">All sessions by category</div>
+      <div class="page-sub">All sessions by category</div>
     </div>
-    <div class="sessions-grid" id="sessions-list"></div>
+    <div id="sessions-list"></div>
   </div>
 
-  <!-- RACE PAGE -->
+  <!-- RACE -->
   <div class="page" id="page-race">
-    <div class="race-page">
-      <div class="race-countdown">
-        <div class="countdown-number" id="days-left">—</div>
-        <div class="countdown-label">Days to Race</div>
-        <div class="countdown-date">Wednesday 1 July 2026 · HYROX Doubles</div>
+    <div class="race-pg">
+      <div class="countdown-card">
+        <div class="cd-num" id="days-left">—</div>
+        <div class="cd-lbl">Days to Race</div>
+        <div class="cd-date">Wednesday 1 July 2026 · HYROX Doubles</div>
       </div>
-
-      <div class="key-stats">
-        <div class="stat-card">
-          <div class="stat-value">Sub-1:05</div>
-          <div class="stat-label">Doubles target</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">1:28:47</div>
-          <div class="stat-label">Solo PB</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">&lt;10s</div>
-          <div class="stat-label">Roxzone target</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">100m</div>
-          <div class="stat-label">Carry unbroken</div>
-        </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-val">Sub-1:05</div><div class="stat-lbl">Doubles target</div></div>
+        <div class="stat-card"><div class="stat-val">1:28:47</div><div class="stat-lbl">Solo PB</div></div>
+        <div class="stat-card"><div class="stat-val">&lt;10s</div><div class="stat-lbl">Roxzone target</div></div>
+        <div class="stat-card"><div class="stat-val">4:50/km</div><div class="stat-lbl">Run target pace</div></div>
       </div>
-
-      <div class="race-order-card">
-        <div class="race-order-title">Race Order — Know This Cold</div>
-        <div class="race-order-items" id="race-order"></div>
-      </div>
-
-      <div class="targets-list">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;margin-top:20px;">Race Day Targets</div>
-        <div class="target-item">
-          <div class="target-icon">🏃</div>
-          <div class="target-text">
-            <div class="target-title">Sub-5:00/km runs</div>
-            <div class="target-desc">Solo avg was 5:24/km over 8km</div>
-          </div>
-        </div>
-        <div class="target-item">
-          <div class="target-icon">⚡</div>
-          <div class="target-text">
-            <div class="target-title">Every roxzone under 10s</div>
-            <div class="target-desc">You: 11:56 · Partner: 8:51 · Gap: 3:05</div>
-          </div>
-        </div>
-        <div class="target-item">
-          <div class="target-icon">💪</div>
-          <div class="target-text">
-            <div class="target-title">Farmers carry 100m unbroken</div>
-            <div class="target-desc">Was your worst station — 83.5th percentile</div>
-          </div>
-        </div>
-        <div class="target-item">
-          <div class="target-icon">🎯</div>
-          <div class="target-text">
-            <div class="target-title">BBJ — zero order errors</div>
-            <div class="target-desc">Error cost 6+ min in solo race</div>
-          </div>
-        </div>
-        <div class="target-item">
-          <div class="target-icon">🏋️</div>
-          <div class="target-text">
-            <div class="target-title">Wall balls unbroken first 30</div>
-            <div class="target-desc">Then survive the back 70</div>
-          </div>
-        </div>
+      <div class="section-title">Race Day Targets</div>
+      <div class="target-item"><div class="t-icon">🏃</div><div><div class="t-title">Sub-4:50/km runs</div><div class="t-desc">Solo avg was 5:24/km · 34s/km improvement needed</div></div></div>
+      <div class="target-item"><div class="t-icon">⚡</div><div><div class="t-title">Every roxzone under 10s</div><div class="t-desc">You: 11:56 · Partner: 8:51 · Gap to close: 3:05</div></div></div>
+      <div class="target-item"><div class="t-icon">💪</div><div><div class="t-title">Farmers carry 100m unbroken</div><div class="t-desc">Was your worst station — 83.5th percentile</div></div></div>
+      <div class="target-item"><div class="t-icon">🎯</div><div><div class="t-title">BBJ — zero order errors</div><div class="t-desc">Error cost 850m extra rowing + 6+ min in solo</div></div></div>
+      <div class="target-item"><div class="t-icon">🏋️</div><div><div class="t-title">Wall balls unbroken first 30</div><div class="t-desc">Highest lactate station per 2025 research</div></div></div>
+      <div class="target-item"><div class="t-icon">📊</div><div><div class="t-title">Sub-1:05 breakdown</div><div class="t-desc">8 runs @4:50 = 38:40 · 8 stations @2:30 = 20:00 · Roxzone = 1:20</div></div></div>
+      <div class="order-card">
+        <div class="section-title" style="margin-top:0">Race Order — Know Cold</div>
+        <div id="race-order"></div>
       </div>
     </div>
+  </div>
+
+  <!-- ATHLETES -->
+  <div class="page" id="page-athletes">
+    <div class="page-header">
+      <div class="page-title">ATHLETES</div>
+      <div class="page-sub">The programs behind your plan</div>
+    </div>
+    <div id="athlete-list"></div>
   </div>
 
 </main>
 
-<!-- BOTTOM TABS -->
 <nav class="tabs">
-  <button class="tab active" onclick="showPage('schedule', this)">
-    <span class="tab-icon">📅</span>
-    Schedule
-  </button>
-  <button class="tab" onclick="showPage('sessions', this)">
-    <span class="tab-icon">⚡</span>
-    Sessions
-  </button>
-  <button class="tab" onclick="showPage('race', this)">
-    <span class="tab-icon">🏁</span>
-    Race Day
-  </button>
+  <button class="tab active" onclick="showPage('schedule',this)"><span class="tab-icon">📅</span>Schedule</button>
+  <button class="tab" onclick="showPage('sessions',this)"><span class="tab-icon">⚡</span>Sessions</button>
+  <button class="tab" onclick="showPage('race',this)"><span class="tab-icon">🏁</span>Race</button>
+  <button class="tab" onclick="showPage('athletes',this)"><span class="tab-icon">🏆</span>Athletes</button>
 </nav>
 
-<!-- SESSION MODAL -->
-<div class="modal-overlay" id="modal" onclick="closeModal(event)">
-  <div class="modal" id="modal-inner">
+<div class="modal-overlay" id="modal" onclick="closeModalBg(event)">
+  <div class="modal">
     <div class="modal-handle"></div>
-    <button class="modal-close" onclick="closeModalBtn()">✕</button>
     <div class="modal-header">
-      <div class="modal-type" id="modal-type"></div>
-      <div class="modal-title" id="modal-title"></div>
-      <div class="modal-chips" id="modal-chips"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-type" id="m-type"></div>
+      <div class="modal-title" id="m-title"></div>
+      <div class="modal-chips" id="m-chips"></div>
     </div>
-    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-body" id="m-body"></div>
   </div>
 </div>
 
 <script>
-// ─── DATA ───────────────────────────────────────────────────────────────────
+// ── RACE ORDER ────────────────────────────────────────────────────────────────
+const RACE_ORDER = ['Ski Erg','Sled Push','Sled Pull','Row','Farmers Carry','Sandbag Lunges','Wall Balls','Burpee Broad Jumps'];
 
-const RACE_ORDER = [
-  'Ski Erg', 'Sled Push', 'Sled Pull', 'Row',
-  'Farmers Carry', 'Sandbag Lunges', 'Wall Balls', 'Burpee Broad Jumps'
+// ── ATHLETES ─────────────────────────────────────────────────────────────────
+const ATHLETES = [
+  {
+    name:'Cole Learn',
+    title:'Elite 15 · World Record Holder · Melbourne 2025 (6th)',
+    principles:[
+      'Threshold-first structure — running is prioritised as session 1 every day, before any station work.',
+      'Runs 70–80km/week. Key session: 6 x 2km intervals at threshold with 70s rest. Built mileage slowly over 2 years.',
+      'Station circuit: 12 rounds of 500m ski or row + 100ft BBJ immediately after, 45s rest between rounds.',
+      'Avoids excessive VO2 work — raises threshold pace as primary lever. Biggest gains came from sustainable race speed.',
+      'Recovery is non-negotiable: 8+ hours sleep, enough food. Without these everything falls apart.'
+    ]
+  },
+  {
+    name:'Jake Dearden',
+    title:'HYROX World Champion Doubles (Nice) · Solo PB 55:44 (Glasgow 2025)',
+    principles:[
+      'Weekly structure: 2 strength days, 2 running days (speed + speed endurance), 1 big conditioning session.',
+      'Doubles principle: training solo prepares you better than doubles-specific prep. Race as if you\'re doing it alone.',
+      'EMOM-style station work mirrors doubles racing — approx 30s on, 30s off per person at each station.',
+      'Number 1 race tip: don\'t go out too hard. Pacing is as critical as fitness.',
+      'Conditioning session format: run + station + station, back to back, high intensity.'
+    ]
+  },
+  {
+    name:'Ryan Kent',
+    title:'Elite 15 Athlete · HYROX Coach',
+    principles:[
+      'Doubles training insight: training with rest periods in mind hurts performance. Train as if racing solo.',
+      'EMOM framework on all 8 stations builds the work-rest pattern that doubles racing demands.',
+      'Station priority: legs, pulling strength, and functional movements (sled, lunges, carries) above all else.',
+      'Transition emphasis: every second lost fumbling between stations adds up dramatically across 8 roxzones.',
+      'Compromised running is the skill most athletes underestimate — nothing prepares you like training it.'
+    ]
+  },
+  {
+    name:'Alexander Rončević',
+    title:'Multiple HYROX World Champion',
+    principles:[
+      'Training volume: 20–25 hours per week, twice daily, with intervals, long runs, strength and technique.',
+      'Core principle: durability under accumulated fatigue is the decisive factor in HYROX performance.',
+      'The sport constantly tests your ability to perform under compounding fatigue — that\'s what training must replicate.',
+      'Station 8 should look the same as station 1. That\'s the durability standard this plan is built toward.'
+    ]
+  },
+  {
+    name:'2025 Research',
+    title:'Frontiers in Physiology + HYROX Performance Studies',
+    principles:[
+      'Average race: 51 minutes running vs 33 minutes stations. Running is where races are won or lost.',
+      'Wall balls produced the highest lactate and RPE of all 8 stations — your hardest station.',
+      'VO2 max and endurance training volume directly correlate with faster finish times.',
+      'Good movement efficiency reduces wasted energy and lowers injury risk — technique under fatigue is decisive.',
+      'Pacing is as critical as fitness. Athletes who go out too hard lose 60–90 seconds in the back half.'
+    ]
+  }
 ];
 
+// ── SESSION DATA ──────────────────────────────────────────────────────────────
 const SESSIONS = {
   hyrox: [
     {
-      id: 'h1', num: '01', name: 'Threshold Baseline', theme: 'Aerobic Benchmark',
-      duration: '47 min', rpe: 7,
-      warmup: ['3 min easy run', '2 rounds: 10 squats + 10 push-ups + 200m run'],
-      main: [
-        { main: '4 Rounds', sub: '800m run @ race pace → 400m ski erg → Rest 90s' },
-        { main: 'Log every split', sub: 'You want consistency across all 4 rounds' }
+      id:'h1', num:'01', name:'Threshold Baseline', theme:'Aerobic Benchmark', duration:'47 min', rpe:7,
+      athlete:'Cole Learn',
+      flexRest:false,
+      warmup:['3 min easy run','2 rounds: 10 squats + 10 push-ups + 200m run'],
+      main:[
+        {m:'4 Rounds', s:'800m run @ race pace (4:50–5:00/km) → 400m ski erg @ race pace', rest:'Rest: 90s minimum — up to 2 min if splits drifting'},
+        {m:'Log every split', s:'Consistency across all 4 rounds is the goal — not fastest round 1'}
       ],
-      finisher: ['2 rounds: 25 wall balls @ 9kg unbroken + 40m farmers carry @ race weight'],
-      coaching: [
-        'Baseline session. Log everything. Compare in Week 5.',
-        'If ski splits drift more than 8 seconds round 1 to 4, you went out too hard.',
-        'Wall balls unbroken every round. If you break, that\'s your limiter.'
-      ]
+      finisher:['2 rounds: 25 wall balls @ 9kg unbroken + 40m farmers carry @ race weight — 90s between rounds'],
+      coaching:['Learn prioritises threshold running as session 1 every day. Treat the run the same way.','Ski splits should stay within 8 seconds across all 4 rounds. Bigger drift = went out too hard.','Wall balls unbroken is the standard. Every session, every time. If you break, that\'s your limiter.']
     },
     {
-      id: 'h2', num: '02', name: 'Sled + Engine', theme: 'Ground-Based Power',
-      duration: '46 min', rpe: 8,
-      warmup: ['400m easy jog', 'Dynamic lunges + hip circles', '2 x 25m empty sled push'],
-      main: [
-        { main: '4 Rounds', sub: '600m run → Sled push 25m → Sled pull 25m → 10 BBJ → Rest 90s' },
-        { main: 'BBJ cue', sub: 'Deliberate, full lock-out every rep' }
+      id:'h2', num:'02', name:'Sled + Engine', theme:'Ground-Based Power', duration:'46 min', rpe:8,
+      athlete:'Jake Dearden',
+      flexRest:false,
+      warmup:['400m easy jog','Dynamic lunges + hip circles','2 x 25m empty sled push — find your drive angle'],
+      main:[
+        {m:'4 Rounds', s:'600m run @ race pace → Sled push 25m → Sled pull 25m → 10 BBJ deliberate full lock-out', rest:'Rest: 90s minimum — up to 2:30 if HR not recovered enough to hold run pace'}
       ],
-      finisher: ['80m sandbag lunges unbroken @ race weight'],
-      coaching: [
-        'Sled push: low hips, full foot contact, drive from the floor.',
-        'BBJ: land soft, immediately redirect. No standing between reps.',
-        'Lunges: bear-hug grip, tall spine, full stride length.'
-      ]
+      finisher:['80m sandbag lunges @ race weight unbroken'],
+      coaching:['Dearden\'s big conditioning session: run + station + station back to back.','Sled push: low hips, full foot contact, drive from the floor. Not a shuffle.','80m lunge finisher = race distance (24m) plus buffer. Build the capacity now.','BBJ: soft landing, immediate redirect. No standing between reps.']
     },
     {
-      id: 'h3', num: '03', name: 'Compromised Running', theme: 'Run Under Station Fatigue',
-      duration: '48 min', rpe: 8,
-      warmup: ['400m easy jog', '4 x 50m strides building to threshold', 'Hip flexor stretch 30s each side'],
-      main: [
-        { main: 'Continuous', sub: '1km run → 40 wall balls @ 9kg → 1km run → 500m row → 1km run → 30 BBJ → 1km run best effort' }
+      id:'h3', num:'03', name:'Compromised Running', theme:'Run Under Station Fatigue', duration:'48 min', rpe:8,
+      athlete:'Jake Dearden',
+      flexRest:false,
+      warmup:['400m easy jog','4 x 50m strides building to threshold','Hip flexor stretch 30s each side'],
+      main:[
+        {m:'Continuous — no rest between', s:'1km run @ race pace → 40 wall balls @ 9kg → 1km run → 500m row → 1km run → 30 BBJ deliberate → 1km run best effort finish'}
       ],
-      finisher: [],
-      coaching: [
-        'Start running immediately after each station. Don\'t stop to breathe at the machine.',
-        'Log each 1km split. You want them within 15 seconds of each other.',
-        'BBJ race order: it comes after wall balls. Feel that sequence here.'
-      ]
+      finisher:[],
+      coaching:['Dearden: nothing prepares you for going all out on a sled then straight into a 1km run.','2025 research: wall balls = highest lactate station. Your hardest station goes first.','Start running immediately after each station. Don\'t stop to breathe at the machine.','Log each 1km split. Drift tells you exactly where your limiter is.']
     },
     {
-      id: 'h4', num: '04', name: 'Aerobic Density', theme: 'Zone 2 Base + Continuous Volume',
-      duration: '45 min', rpe: 6,
-      warmup: ['Easy 5 min jog straight into the block'],
-      main: [
-        { main: '40 min continuous', sub: '500m row → 400m run → 15 wall balls → 400m run → 15 BBJ — repeat' },
-        { main: 'Nasal breathing only', sub: 'If you\'re mouth breathing, slow down' }
+      id:'h4', num:'04', name:'Aerobic Density', theme:'Durability Base', duration:'45 min', rpe:6,
+      athlete:'Alexander Rončević',
+      flexRest:false,
+      warmup:['5 min easy jog straight into the block'],
+      main:[
+        {m:'40 min continuous — nasal breathing only', s:'500m row → 400m run → 15 wall balls → 400m run → 15 BBJ @ 50% pace → repeat without stopping'}
       ],
-      finisher: [],
-      coaching: [
-        'Do not turn this into a workout. Conversational pace throughout.',
-        'BBJ at 50% is about movement pattern — engrain the technique.',
-        'Log total rounds completed. Beat it next time.'
-      ]
+      finisher:[],
+      coaching:['Rončević principle: durability under accumulated fatigue is decisive. This builds it.','Nasal breathing throughout. If you\'re mouth breathing, slow down. That IS the instruction.','BBJ at 50% is about movement pattern only — engrain the technique here.','Log total rounds. Beat it next time.']
     },
     {
-      id: 'h5', num: '05', name: 'Roxzone Assault', theme: 'Transition Speed',
-      duration: '47 min', rpe: 7,
-      warmup: ['400m easy jog', '2 x 25m light sled push — practice exit posture', '5 min mobility'],
-      main: [
-        { main: 'Time every transition', sub: 'Finish to start of next station = roxzone' },
-        { main: 'Block 1', sub: '200m run → Ski 500m (exit <10s) → Sled push 2x25m (exit <10s) → Sled pull 2x25m (exit <10s) → Rest 90s' },
-        { main: 'Block 2', sub: '200m run → Row 500m (exit <10s) → Carry 100m (exit <10s) → 30 wall balls (exit <10s, run 200m hard) → Rest 90s' },
-        { main: 'Block 3', sub: '20 BBJ (time exit) → Sandbag lunges 20m' }
+      id:'h5', num:'05', name:'Roxzone Assault', theme:'Transition Speed', duration:'47 min', rpe:7,
+      athlete:'Ryan Kent',
+      flexRest:false,
+      warmup:['400m easy jog','2 x 25m light sled — practice exit posture','5 min mobility'],
+      main:[
+        {m:'Time every transition — target under 10s each', s:'200m run → Ski 500m (exit <10s) → Sled push 2x25m (exit <10s) → Sled pull 2x25m (exit <10s)', rest:'Rest: 90s minimum'},
+        {m:'Block 2', s:'200m run → Row 500m (exit <10s) → Carry 100m (exit <10s) → 30 wall balls (exit <10s, run 200m hard)', rest:'Rest: 90s minimum'},
+        {m:'Block 3', s:'20 BBJ (time exit) → Sandbag lunges 20m — done'}
       ],
-      finisher: ['3 min walk'],
-      coaching: [
-        'Your roxzone (11:56) vs partner\'s (8:51) = 3:05 gap. This closes it.',
-        'Target: every transition under 10 seconds.',
-        'No stopping to breathe at the machine. Feet moving immediately.'
-      ]
+      finisher:['3 min walk'],
+      coaching:['Kent: every second lost fumbling between stations adds up dramatically.','Your roxzone: 11:56. Partner\'s: 8:51. Gap: 3:05. This session closes it.','Feet moving before your brain gives permission. That\'s the habit to build.','Target: every transition under 10 seconds. Clock all of them.']
     },
     {
-      id: 'h6', num: '06', name: 'Sled Loading Block', theme: 'Sled-Specific Strength Endurance',
-      duration: '46 min', rpe: 8,
-      warmup: ['400m easy jog', '10 goblet squats + 10 hip bridges', '2 x 25m empty sled push'],
-      main: [
-        { main: 'Sets 1–2', sub: 'Sled push 2x25m @ race weight | 90s rest' },
-        { main: 'Sets 3–4', sub: 'Sled pull 2x25m @ race weight | 90s rest' },
-        { main: 'Set 5', sub: 'Push 25m + pull 25m back-to-back @ race weight | 2 min rest' },
-        { main: 'Set 6', sub: 'Push + pull @ race weight + 10kg | 2 min rest' },
-        { main: 'Set 7', sub: 'Push + pull @ race weight + 10kg | 2 min rest' },
-        { main: 'Set 8', sub: 'Push + pull @ race weight — fast finish' }
+      id:'h6', num:'06', name:'Sled Loading Block', theme:'Strength Endurance + Overload', duration:'46 min', rpe:8,
+      athlete:'Ryan Kent',
+      flexRest:true,
+      warmup:['400m easy jog','10 goblet squats + 10 hip bridges','2 x 25m empty sled'],
+      main:[
+        {m:'Sets 1–2: Sled push 2x25m @ race weight', s:'', rest:'Rest: 90s minimum — up to 2 min. Quality of drive matters more than clock.'},
+        {m:'Sets 3–4: Sled pull 2x25m @ race weight', s:'', rest:'Rest: 90s minimum — up to 2 min'},
+        {m:'Set 5: Push 25m + pull 25m back-to-back @ race weight', s:'', rest:'Rest: 2 min minimum'},
+        {m:'Set 6: Push + pull @ race weight + 10kg', s:'OVERLOAD — this is where the adaptation is', rest:'Rest: 2 min minimum — up to 3 min'},
+        {m:'Set 7: Push + pull @ race weight + 10kg', s:'OVERLOAD', rest:'Rest: 2 min minimum — up to 3 min'},
+        {m:'Set 8: Push + pull @ race weight', s:'Fast finish', rest:''}
       ],
-      finisher: ['400m easy jog'],
-      coaching: [
-        'Overload sets build the reserve that makes race weight feel easy.',
-        'Push: hips below shoulders, arms straight, drive through the whole foot.',
-        'Pull: stay low, hand-over-hand or lateral depending on setup.'
-      ]
+      finisher:['400m easy jog'],
+      coaching:['Gymshark research: train heavier than race weight so race weight feels easy. That\'s sets 6–7.','Rest is flexible here — quality of drive position is the measure, not the clock.','Push: hips below shoulders, arms straight, drive through the whole foot.','Pull: stay low, hand-over-hand or lateral depending on your setup.']
     },
     {
-      id: 'h7', num: '07', name: 'Threshold Intervals', theme: 'Speed at Pace',
-      duration: '48 min', rpe: 8,
-      warmup: ['400m easy jog', '4 x 100m building strides', '5 min mobility'],
-      main: [
-        { main: '6 Rounds', sub: '500m run above race pace → 300m ski erg → 15 wall balls @ 9kg unbroken → Rest 90s' }
+      id:'h7', num:'07', name:'Threshold Intervals', theme:'Speed at Race Pace', duration:'48 min', rpe:8,
+      athlete:'Cole Learn',
+      flexRest:false,
+      warmup:['400m easy jog','4 x 100m building strides','5 min mobility'],
+      main:[
+        {m:'6 Rounds', s:'500m run above race pace (10–15s/km faster) → 300m ski erg → 15 wall balls @ 9kg unbroken', rest:'Rest: 90s minimum — non-negotiable. This is what makes it threshold, not grinding.'}
       ],
-      finisher: [],
-      coaching: [
-        'Above race pace = 10–15s/km faster than your target.',
-        'Log 500m run split every round. Consistency is the goal.',
-        'Wall balls unbroken every round. Break in round 3+ = run was too hard.'
-      ]
+      finisher:[],
+      coaching:['Learn: 6 x 2km at threshold with 70s rest. Your version adds ski and wall balls — same stimulus.','90s rest is what separates threshold intervals from aerobic suffering. Never shorten it.','Log your 500m run split every round. Consistency across 6 rounds = fitness. Drift = went too hard.','Wall balls unbroken every round. Break in round 3+ = run was too aggressive.']
     },
     {
-      id: 'h8', num: '08', name: 'Farmers Carry + Run', theme: 'Worst Station Attack',
-      duration: '47 min', rpe: 7,
-      warmup: ['2 min easy row', 'Carry 30m @ 50% race weight — posture check', '10 goblet squats + 10 RDLs'],
-      main: [
-        { main: 'Round 1', sub: '50m @ 50% race weight unbroken + 200m threshold | 90s rest' },
-        { main: 'Round 2', sub: '75m @ 75% race weight (1 set down OK) + 200m threshold | 90s rest' },
-        { main: 'Round 3', sub: '100m @ race weight (1 set down OK) + 200m threshold | 2 min rest' },
-        { main: 'Round 4', sub: '100m @ race weight (no set down) + 400m threshold | 2 min rest' },
-        { main: 'Round 5', sub: '100m @ race weight (no set down) + 200m fast finish' }
+      id:'h8', num:'08', name:'Farmers Carry + Run', theme:'Worst Station Attack', duration:'47 min', rpe:7,
+      athlete:'Ryan Kent',
+      flexRest:true,
+      warmup:['2 min easy row','Carry 30m @ 50% race weight — posture check','10 goblet squats + 10 RDLs'],
+      main:[
+        {m:'Round 1: 50m @ 50% race weight unbroken + 200m threshold', s:'', rest:'Rest: 90s minimum'},
+        {m:'Round 2: 75m @ 75% race weight (1 set down OK) + 200m threshold', s:'', rest:'Rest: 90s minimum'},
+        {m:'Round 3: 100m @ race weight (1 set down OK) + 200m threshold', s:'', rest:'Rest: 2 min minimum — up to 3 min. The goal is unbroken 100m, not speed.'},
+        {m:'Round 4: 100m @ race weight (no set down) + 400m threshold', s:'', rest:'Rest: 2 min minimum — up to 3 min'},
+        {m:'Round 5: 100m @ race weight (no set down) + 200m fast finish', s:'', rest:''}
       ],
-      finisher: ['5 min walk'],
-      coaching: [
-        'Farmers carry was your worst station — 83.5th percentile in your solo.',
-        'Train without straps. Grip strength is part of the adaptation.',
-        'Every set down costs 10–15 seconds on race day.'
-      ]
+      finisher:['5 min walk'],
+      coaching:['Farmers carry was your worst station — 83.5th percentile in your solo. This fixes it.','Train without straps. Grip endurance is part of the adaptation.','Kent: legs, pulling strength, and carries are the priority. This is that session.','Every set down costs 10–15 seconds on race day. Train the no-set-down habit now.']
     },
     {
-      id: 'h9', num: '09', name: 'BBJ Mastery', theme: 'Burpee Broad Jump Volume',
-      duration: '46 min', rpe: 7,
-      warmup: ['400m jog', '10 broad jumps building distance', '10 slow burpees — lock out at top'],
-      main: [
-        { main: 'Block A', sub: '3 x 20 BBJ @ 80% pace — land and redirect immediately | 90s between sets' },
-        { main: 'Block B', sub: '200m run + 30 BBJ + 200m run | 2 min rest' },
-        { main: 'Block C', sub: '3 x 10 BBJ max distance — track your mark | 60s rest' },
-        { main: 'Block D', sub: '200m run + 40 BBJ + 200m run | 2 min rest' },
-        { main: 'Block E', sub: '2 x 20 BBJ fast | done' }
+      id:'h9', num:'09', name:'BBJ Mastery', theme:'Burpee Broad Jump Volume', duration:'46 min', rpe:7,
+      athlete:'Cole Learn',
+      flexRest:false,
+      warmup:['400m jog','10 broad jumps building distance','10 slow burpees — lock out at top, soft landing'],
+      main:[
+        {m:'Block A: 3 x 20 BBJ @ 80% pace', s:'Land and redirect immediately — no pause between reps', rest:'Rest: 90s minimum between sets'},
+        {m:'Block B: 200m run + 30 BBJ + 200m run', s:'Don\'t slow at the station', rest:'Rest: 2 min'},
+        {m:'Block C: 3 x 10 BBJ max distance', s:'Track your mark — measure it', rest:'Rest: 60s minimum'},
+        {m:'Block D: 200m run + 40 BBJ + 200m run', s:'Race pace throughout', rest:'Rest: 2 min'},
+        {m:'Block E: 2 x 20 BBJ fast', s:'Stay loose', rest:'Done'}
       ],
-      finisher: ['5 min walk'],
-      coaching: [
-        'Race order cold: Ski → Push → Pull → Row → Carry → Lunges → Wall Balls → BBJ.',
-        'The order error in your solo cost 850m of extra rowing. Never again.',
-        'BBJ cue: soft knees, immediate redirect upward. No standing between reps.'
-      ]
+      finisher:['5 min walk'],
+      coaching:['Race order cold: Ski → Push → Pull → Row → Carry → Lunges → Wall Balls → BBJ.','The order error in your solo cost 850m extra rowing + 6+ min. This session closes that.','Learn\'s circuit: 500m ski then immediate 100ft BBJ. Same principle, your volume.','BBJ cue: soft knees, immediate redirect upward. No standing between reps.']
     },
     {
-      id: 'h10', num: '10', name: 'Race Rehearsal', theme: 'Race Pace + Negative Split',
-      duration: '50 min', rpe: 9,
-      warmup: ['400m easy jog — race day protocol', '2 min dynamic mobility', '200m at race pace'],
-      main: [
-        { main: 'Race Effort', sub: '1km run → Ski 500m (exit <10s) → 1km run → Sled push 25m (exit <10s) → 1km run → Sled pull 25m (exit <10s) → 1km run → 40 wall balls (exit <10s) → 1km run' },
-        { main: 'NEGATIVE SPLIT RULE', sub: 'Last run MUST be faster than first run' }
+      id:'h10', num:'10', name:'Race Rehearsal', theme:'Race Pace + Negative Split Rule', duration:'50 min', rpe:9,
+      athlete:'Jake Dearden',
+      flexRest:false,
+      warmup:['400m easy jog — race day protocol','2 min dynamic mobility','200m at race pace'],
+      main:[
+        {m:'Race effort — log every split', s:'1km run (controlled) → Ski 500m (exit <10s) → 1km run → Sled push 25m (exit <10s) → 1km run → Sled pull 25m (exit <10s) → 1km run → 40 wall balls (exit <10s) → 1km run'},
+        {m:'NEGATIVE SPLIT RULE', s:'Last run MUST be faster than first run. Non-negotiable. This is race discipline.', rest:''}
       ],
-      finisher: ['Log every split. Walk it out.'],
-      coaching: [
-        'Log every run and station split. Compare to Session 1 — that gap is your improvement.',
-        'Negative split rule is non-negotiable. Teaches race discipline.',
-        'If run 5 is slower than run 1, you started too hard. Adjust race day pacing.'
-      ]
+      finisher:['Log every split. Walk it out.'],
+      coaching:['Dearden #1 tip: don\'t go out too hard. The negative split rule trains that discipline.','Compare every split to Session 1. That gap is your block improvement.','If run 5 is slower than run 1, you started too hard. Adjust race day pacing accordingly.','Every roxzone under 10 seconds. You\'ve drilled it. Execute it.']
     },
     {
-      id: 'h11', num: '11', name: 'Full Race Simulation', theme: 'Peak Effort — All 8 Stations',
-      duration: '50 min', rpe: 9,
-      warmup: ['400m easy jog', '2 min dynamic mobility', '200m at race pace'],
-      main: [
-        { main: 'Log every split', sub: '1km run → Ski 1000m → 1km → Sled push 2x25m → 1km → Sled pull 2x25m → 1km → Row 1000m → 1km → Carry 100m → 1km → Lunges 24m → 1km → Wall balls 100 reps → 1km → BBJ 30 reps' },
-        { main: 'Every roxzone', sub: 'Under 10 seconds. You\'ve drilled it. Execute.' }
+      id:'h11', num:'11', name:'Full Race Simulation', theme:'All 8 Stations — Peak Effort', duration:'50 min', rpe:9,
+      athlete:'All Athletes',
+      flexRest:false,
+      warmup:['400m easy jog','2 min dynamic mobility','200m at race pace'],
+      main:[
+        {m:'Log every split. Every roxzone under 10s.', s:'1km → Ski 1000m → 1km → Sled push 2x25m → 1km → Sled pull 2x25m → 1km → Row 1000m → 1km → Carry 100m → 1km → Lunges 24m → 1km → Wall balls 100 reps → 1km → BBJ 30 reps', rest:''},
+        {m:'Rončević standard', s:'Station 8 should look the same as station 1. That is the durability test.', rest:''}
       ],
-      finisher: ['Walk only. You earned it.'],
-      coaching: [
-        'Compare every split to Session 7. That gap is your improvement.',
-        'Start conservative on run 1. Athletes who go out too hot lose 90 sec in back half.',
-        'This is your last high-intensity session. Finish with something to prove.'
-      ]
+      finisher:['Walk only. You earned it.'],
+      coaching:['Learn: threshold pace across all runs — not max effort on run 1.','Dearden: start conservative. Negative split the back half.','Kent: every roxzone under 10 seconds. No exceptions.','Rončević: durability standard — station 8 looks like station 1. That\'s what 6 weeks built.','Compare every split to Session 7. That gap is your improvement.']
     },
     {
-      id: 'h12', num: '12', name: 'Race Day Sharpener', theme: 'Taper — Feel Sharp',
-      duration: '45 min', rpe: 7,
-      warmup: ['400m easy jog', 'Full body dynamic mobility', '200m at race pace — feel the speed'],
-      main: [
-        { main: '7/10 effort only', sub: 'Ski 500m → 1km run → Sled push 2x25m → 1km run → 30 wall balls unbroken → 1km run → 20 BBJ controlled' }
+      id:'h12', num:'12', name:'Race Day Sharpener', theme:'Taper — Feel Sharp Not Wrecked', duration:'45 min', rpe:7,
+      athlete:'Jake Dearden',
+      flexRest:false,
+      warmup:['400m easy jog','Full body dynamic mobility','200m at race pace — feel the speed, you have it'],
+      main:[
+        {m:'7/10 effort only', s:'Ski 500m @ race pace → 1km run → Sled push 2x25m → 1km run → 30 wall balls unbroken → 1km run → 20 BBJ controlled deliberate correct order', rest:''}
       ],
-      finisher: ['10 min walk. Nothing else.'],
-      coaching: [
-        'The work is done. This is a reminder of what you\'ve built.',
-        'Do not add volume. Trust the block.',
-        'Race day: own every station. Let your partner run.'
-      ]
+      finisher:['10 min walk. Nothing else.'],
+      coaching:['The work is done. This session is confirmation not construction.','Do not add volume. Do not try to cram. The fitness is in. Trust it.','Walk out feeling sharp — not wrecked. That\'s the only goal today.','Race day: own every station. Let your partner run.']
     }
   ],
   run: [
     {
-      id: 'r1', num: 'T1', name: 'Baseline Threshold', theme: '20 min continuous',
-      duration: '45 min', rpe: 7,
-      warmup: ['10 min easy jog'],
-      main: [
-        { main: '20 min continuous', sub: 'Threshold pace: 4:45–5:00/km' },
-        { main: '10 min easy cool-down', sub: '' },
-        { main: '4 x strides', sub: '80m each, walk back recovery' }
+      id:'r1', num:'T1', name:'Baseline Threshold', theme:'20 min continuous — benchmark', duration:'45 min', rpe:7,
+      athlete:'Cole Learn',
+      flexRest:false,
+      warmup:['10 min easy jog'],
+      main:[
+        {m:'20 min continuous @ threshold', s:'Target: 4:45–5:00/km. This is your week 1 baseline number.'},
+        {m:'10 min easy cool-down', s:''},
+        {m:'4 x strides', s:'80m each, walk back recovery'}
       ],
-      finisher: [],
-      coaching: [
-        'First threshold run. Note your average pace. This is your week 1 baseline.',
-        'Don\'t start too fast. The 20 min block is the work.',
-        'Strides after cool-down — controlled acceleration, not a sprint.'
-      ]
+      finisher:[],
+      coaching:['Note your average pace for the 20 min. Compare this to T5 in week 5.','Learn runs 6 x 2km at threshold. Your 20 min continuous is the same adaptation at your volume.','Don\'t start too fast. The 20 min block is the work — consistent effort throughout.']
     },
     {
-      id: 'r2', num: 'T2', name: 'Cruise Intervals', theme: '3 x 8 min',
-      duration: '45 min', rpe: 7,
-      warmup: ['10 min easy jog'],
-      main: [
-        { main: '3 x 8 min @ threshold', sub: '2 min easy jog between each' },
-        { main: '10 min easy cool-down', sub: '' }
+      id:'r2', num:'T2', name:'Cruise Intervals', theme:'3 x 8 min threshold', duration:'45 min', rpe:7,
+      athlete:'Cole Learn',
+      flexRest:false,
+      warmup:['10 min easy jog'],
+      main:[
+        {m:'3 x 8 min @ threshold', s:'', rest:'Rest: 2 min easy jog between — minimum, not maximum'},
+        {m:'10 min easy cool-down', s:''}
       ],
-      finisher: [],
-      coaching: [
-        'Same total threshold work as T1 (24 min) broken into intervals.',
-        'Each 8 min block should feel the same — not harder as you go.',
-        'Compare average pace to T1. You should be at same pace or faster.'
-      ]
+      finisher:[],
+      coaching:['Same total threshold volume as T1 (24 min) broken into intervals.','Each 8 min block should feel identical — not harder as you go.','Compare average pace to T1. Same pace or faster = block is working.']
     },
     {
-      id: 'r3', num: 'T3', name: 'Extended Threshold', theme: '25 min continuous',
-      duration: '47 min', rpe: 7,
-      warmup: ['10 min easy jog'],
-      main: [
-        { main: '25 min continuous @ threshold', sub: '4:45–5:00/km target' },
-        { main: '10 min easy cool-down', sub: '' },
-        { main: '4 x strides', sub: '80m each' }
+      id:'r3', num:'T3', name:'Extended Threshold', theme:'25 min continuous', duration:'47 min', rpe:7,
+      athlete:'Cole Learn',
+      flexRest:false,
+      warmup:['10 min easy jog'],
+      main:[
+        {m:'25 min continuous @ threshold', s:'4:45–5:00/km target'},
+        {m:'10 min easy cool-down', s:''},
+        {m:'4 x strides', s:'80m each'}
       ],
-      finisher: [],
-      coaching: [
-        'Up from 20 min to 25 min. Same pace. This is where the adaptation happens.',
-        'If you can\'t hold it for 25 min, back off 10 seconds/km.',
-        'Strides: legs should feel fast despite the fatigue. That\'s the point.'
-      ]
+      finisher:[],
+      coaching:['Up from 20 min to 25 min. Same pace. This is where the aerobic adaptation happens.','Learn built from minimal mileage to 80km/week by adding volume slowly. This is that principle.','If you can\'t hold threshold for 25 min, back off 10 seconds/km — don\'t blow up early.']
     },
     {
-      id: 'r4', num: 'T4', name: 'VO2 Max Intervals', theme: '5 x 4 min hard',
-      duration: '46 min', rpe: 9,
-      warmup: ['10 min easy jog'],
-      main: [
-        { main: '5 x 4 min @ 95% effort', sub: '3 min easy jog between each' },
-        { main: '10 min easy cool-down', sub: '' }
+      id:'r4', num:'T4', name:'VO2 Max Intervals', theme:'5 x 4 min hard', duration:'46 min', rpe:9,
+      athlete:'Jake Dearden',
+      flexRest:false,
+      warmup:['10 min easy jog'],
+      main:[
+        {m:'5 x 4 min @ 95% effort', s:'', rest:'Rest: 3 min easy jog between — minimum. Never shorten this.'},
+        {m:'10 min easy cool-down', s:''}
       ],
-      finisher: [],
-      coaching: [
-        'First VO2 max session. 95% effort — hard but not an all-out sprint.',
-        '3 min recovery lets you hit the same intensity each rep.',
-        'This raises your ceiling. It\'s uncomfortable. That\'s the design.'
-      ]
+      finisher:[],
+      coaching:['Dearden uses speed endurance work specifically. This is that session.','3 min recovery is what lets you hit the same intensity each rep. Protect it.','95% effort — hard but not an all-out sprint. Controlled hard.','If rep 4–5 are significantly slower than rep 1, you went out too hard.']
     },
     {
-      id: 'r5', num: 'T5', name: 'Benchmark Run', theme: 'Repeat T1 exactly',
-      duration: '45 min', rpe: 7,
-      warmup: ['10 min easy jog'],
-      main: [
-        { main: '20 min continuous @ threshold', sub: 'Exact same session as T1' },
-        { main: '10 min easy cool-down', sub: '' },
-        { main: '4 x strides', sub: '80m each' }
+      id:'r5', num:'T5', name:'Benchmark Run', theme:'Repeat T1 exactly', duration:'45 min', rpe:7,
+      athlete:'Cole Learn',
+      flexRest:false,
+      warmup:['10 min easy jog'],
+      main:[
+        {m:'20 min continuous @ threshold', s:'Exact same session as T1'},
+        {m:'10 min easy cool-down', s:''},
+        {m:'4 x strides', s:'80m each'}
       ],
-      finisher: [],
-      coaching: [
-        'Compare average pace to T1. If threshold feels easier at the same speed, the block is working.',
-        'Don\'t go harder than threshold. This is a benchmark, not a time trial.',
-        'That gap between T1 and T5 is your 5-week improvement.'
-      ]
+      finisher:[],
+      coaching:['Compare average pace to T1. That gap is your 5-week running improvement.','Same pace should feel easier. That\'s the adaptation signal.','Don\'t go harder than threshold. This is a benchmark not a time trial.']
     },
     {
-      id: 'r6', num: 'T6', name: 'Short Sharp Threshold', theme: 'Taper — stay sharp',
-      duration: '40 min', rpe: 7,
-      warmup: ['10 min easy jog'],
-      main: [
-        { main: '2 x 8 min @ threshold', sub: '2 min easy between' },
-        { main: '10 min easy cool-down', sub: '' },
-        { main: '4 x strides', sub: 'Fast feet, relaxed arms, tall posture' }
+      id:'r6', num:'T6', name:'Short Sharp Threshold', theme:'Taper — stay sharp', duration:'40 min', rpe:7,
+      athlete:'Cole Learn',
+      flexRest:false,
+      warmup:['10 min easy jog'],
+      main:[
+        {m:'2 x 8 min @ threshold', s:'', rest:'Rest: 2 min easy between'},
+        {m:'10 min easy cool-down', s:''},
+        {m:'4 x strides', s:'Fast feet, relaxed arms, tall posture'}
       ],
-      finisher: [],
-      coaching: [
-        'Volume down from peak. Intensity stays. Keeps engine sharp without loading legs.',
-        'Two blocks should feel controlled — not a max effort.',
-        'Last quality run before race day.'
-      ]
+      finisher:[],
+      coaching:['Volume drops. Intensity stays. This keeps the engine sharp without loading the legs.','Last quality running before race day. Keep it controlled.','Walk out feeling fast, not tired.']
     },
     {
-      id: 'z1', num: 'Z1', name: 'Zone 2 Base', theme: 'Easy aerobic — 45 min',
-      duration: '45 min', rpe: 5,
-      warmup: [],
-      main: [
-        { main: '45 min continuous easy run', sub: 'Nasal breathing only — 5:45–6:15/km' }
-      ],
-      finisher: [],
-      coaching: [
-        'If you\'re mouth breathing, slow down. Zone 2 is non-negotiable.',
-        'No stations, no intervals, no pushing. This is active rest.',
-        'Run somewhere enjoyable.'
-      ]
+      id:'z1', num:'Z1', name:'Zone 2 Base', theme:'Easy aerobic — 45 min', duration:'45 min', rpe:5,
+      athlete:'Jake Dearden',
+      flexRest:false,
+      warmup:[],
+      main:[{m:'45 min continuous easy run', s:'Nasal breathing only — 5:45–6:15/km target'}],
+      finisher:[],
+      coaching:['Dearden: long run is built into his weekly structure. This is yours.','If you\'re mouth breathing, slow down. Zone 2 is non-negotiable.','This is active recovery and base building. Do not turn it into a workout.']
     },
     {
-      id: 'z2', num: 'Z2', name: 'Zone 2 + Tempo Finish', theme: 'Easy aerobic — 48 min',
-      duration: '48 min', rpe: 5,
-      warmup: [],
-      main: [
-        { main: '43 min easy run', sub: 'Nasal breathing' },
-        { main: 'Last 5 min', sub: 'Pick up to comfortable controlled pace (optional)' }
+      id:'z2', num:'Z2', name:'Zone 2 + Tempo Finish', theme:'Easy aerobic — 48 min', duration:'48 min', rpe:5,
+      athlete:'Jake Dearden',
+      flexRest:false,
+      warmup:[],
+      main:[
+        {m:'43 min easy run', s:'Nasal breathing throughout'},
+        {m:'Final 5 min', s:'Optional pickup to comfortable controlled pace — only if legs feel good'}
       ],
-      finisher: [],
-      coaching: [
-        'Progressive overload: more time, same pace.',
-        'Tempo finish only if legs feel good.',
-        'This is recovery and base building.'
-      ]
+      finisher:[],
+      coaching:['Progressive overload: more time, same pace.','Tempo finish is optional — only do it if genuinely feeling good.','This is recovery and base building. Not a fitness session.']
     },
     {
-      id: 'z3', num: 'Z3', name: 'Zone 2 + Strides', theme: 'Easy aerobic — 50 min',
-      duration: '50 min', rpe: 5,
-      warmup: [],
-      main: [
-        { main: '40 min easy run', sub: 'Nasal breathing' },
-        { main: '6 x strides in final 10 min', sub: '80m each, walk back' }
+      id:'z3', num:'Z3', name:'Zone 2 + Strides', theme:'50 min + 6 strides', duration:'50 min', rpe:5,
+      athlete:'Cole Learn',
+      flexRest:false,
+      warmup:[],
+      main:[
+        {m:'40 min easy run', s:'Nasal breathing'},
+        {m:'6 x strides in final 10 min', s:'80m each, walk back recovery'}
       ],
-      finisher: [],
-      coaching: [
-        'Strides teach legs to turn over fast despite aerobic fatigue.',
-        'This is the session most athletes skip. Don\'t.',
-        'Keep the nasal breathing rule even during strides approach.'
-      ]
+      finisher:[],
+      coaching:['Strides teach legs to turn over fast despite aerobic fatigue.','This is the session most athletes skip. Don\'t.','Keep nasal breathing even between stride efforts.']
     },
     {
-      id: 'z4', num: 'Z4', name: 'Zone 2 + Strides', theme: 'Peak volume — 50 min',
-      duration: '50 min', rpe: 5,
-      warmup: [],
-      main: [
-        { main: '38 min easy run', sub: 'Nasal breathing' },
-        { main: '8 x strides in final 12 min', sub: '80m each, walk back' }
+      id:'z4', num:'Z4', name:'Zone 2 + Strides', theme:'Peak volume — 50 min + 8 strides', duration:'50 min', rpe:5,
+      athlete:'Cole Learn',
+      flexRest:false,
+      warmup:[],
+      main:[
+        {m:'38 min easy run', s:'Nasal breathing'},
+        {m:'8 x strides in final 12 min', s:'80m each, walk back — strides increased from Z3'}
       ],
-      finisher: [],
-      coaching: [
-        'Highest volume easy run week. Keep the pace honest.',
-        'Strides increased from 6 to 8.',
-        'Legs may feel heavy from Thursday\'s carry session. Keep it easy.'
-      ]
+      finisher:[],
+      coaching:['Highest volume easy run week. Keep the pace honest — nasal breathing is the rule.','Strides increased from 6 to 8. This is your stride progression across the block.','Legs may feel heavy after Thursday carry session. Keep it genuinely easy.']
     },
     {
-      id: 'z5', num: 'Z5', name: 'Easy Recovery Run', theme: 'Taper begins — 40 min',
-      duration: '40 min', rpe: 4,
-      warmup: [],
-      main: [
-        { main: '40 min easy run', sub: 'Nasal breathing, no strides' }
-      ],
-      finisher: [],
-      coaching: [
-        'Shorter than previous Zone 2 runs. Taper starts here.',
-        'After Session 10 yesterday, legs need recovery.',
-        'Easy means easy. If it feels too slow, it\'s probably right.'
-      ]
+      id:'z5', num:'Z5', name:'Easy Recovery Run', theme:'Taper begins — 40 min', duration:'40 min', rpe:4,
+      athlete:'Jake Dearden',
+      flexRest:false,
+      warmup:[],
+      main:[{m:'40 min easy run', s:'Nasal breathing. No strides. Just movement.'}],
+      finisher:[],
+      coaching:['Shorter than previous Zone 2 runs. Intentional — taper starts here.','After Session 10 yesterday, legs need recovery not stimulus.','Easy means easy. If it feels too slow, it\'s probably right.']
     },
     {
-      id: 'z6', num: 'Z6', name: 'Final Easy Run', theme: 'Last run before race week',
-      duration: '30 min', rpe: 4,
-      warmup: [],
-      main: [
-        { main: '30 min easy jog', sub: 'Flat route. No pressure. Just movement.' }
-      ],
-      finisher: [],
-      coaching: [
-        'Last run before race week. Genuinely easy.',
-        'This is not a fitness session. It\'s a nervous system flush.',
-        'Enjoy it.'
-      ]
+      id:'z6', num:'Z6', name:'Final Easy Run', theme:'Last run before race week', duration:'30 min', rpe:4,
+      athlete:'Jake Dearden',
+      flexRest:false,
+      warmup:[],
+      main:[{m:'30 min easy jog', s:'Flat route. No pressure. Just movement.'}],
+      finisher:[],
+      coaching:['Last run before race week. Keep it genuinely easy.','This is not a fitness session. It\'s a nervous system flush and mental reset.','Enjoy it.']
     }
   ],
   strength: [
     {
-      id: 's1', num: 'A', name: 'Lower Body — Foundation', theme: 'Weeks 1–2 | RPE 7',
-      duration: '50 min', rpe: 7,
-      warmup: ['5 min easy bike or row', '10 goblet squats light', '10 Romanian deadlifts light', '10 hip bridges'],
-      main: [
-        { main: 'A — Back Squat', sub: '4 x 6 @ RPE 7 | 2 min rest | Depth, braced core, controlled descent' },
-        { main: 'B — Romanian Deadlift', sub: '4 x 8 @ RPE 7 | 90s rest | Hinge at hip, bar close to legs' },
-        { main: 'C1/C2 Superset', sub: 'C1: Bulgarian split squat 3x8 each leg | C2: Farmers carry 3x40m race weight | Rest 90s between supersets' },
-        { main: 'D — Leg Press', sub: '3 x 12 @ RPE 6 | 60s rest | Full range' },
-        { main: 'E — Single Leg Calf Raise', sub: '3 x 15 each | 45s rest' }
+      id:'sa1', num:'A', name:'Lower Body — Foundation', theme:'Weeks 1–2 | RPE 7', duration:'50 min', rpe:7,
+      athlete:'Ryan Kent',
+      flexRest:true,
+      warmup:['5 min easy bike or row','10 goblet squats light + 10 RDLs light + 10 hip bridges'],
+      main:[
+        {m:'A — Back Squat: 4 x 6 @ RPE 7', s:'Depth, braced core, controlled descent', rest:'Rest: 2 min minimum — up to 3 min'},
+        {m:'B — Romanian Deadlift: 4 x 8 @ RPE 7', s:'Hinge at hip, bar close to legs, feel hamstrings load', rest:'Rest: 90s minimum — up to 2 min'},
+        {m:'C1/C2 — Superset', s:'C1: Bulgarian split squat 3x8 each leg · C2: Farmers carry 3x40m @ race weight', rest:'45s between C1 and C2 · 90s minimum before next superset'},
+        {m:'D — Leg Press: 3 x 12 @ RPE 6', s:'Full range, don\'t lock out at top', rest:'Rest: 60s'},
+        {m:'E — Single leg calf raise: 3 x 15 each', s:'', rest:'Rest: 45s'}
       ],
-      finisher: [],
-      coaching: [
-        'Don\'t go heavier than RPE 7 in weeks 1–2. Build the pattern before the load.',
-        'C1/C2 superset directly builds lunge station power and carry capacity.',
-        'Squat and RDL are your anchor movements. Everything else supports them.'
-      ]
+      finisher:[],
+      coaching:['Kent: legs, pulling strength, and functional movements are the priority.','Split squat + carry superset builds lunge station power and carry capacity together.','RPE 7 = 3 reps in the tank. Don\'t grind. Build the pattern before the load.','Flexible rest — take up to 3 min between squat sets if you need it.']
     },
     {
-      id: 's2', num: 'B', name: 'Upper Body — Foundation', theme: 'Weeks 1–2 | Pull-Bias',
-      duration: '48 min', rpe: 7,
-      warmup: ['5 min easy row', '10 banded pull-aparts', '10 scapular retractions', '10 face pulls'],
-      main: [
-        { main: 'A — Barbell Row', sub: '4 x 6 @ RPE 7 | 2 min rest | Pull to lower chest, controlled lowering' },
-        { main: 'B — Lat Pulldown', sub: '4 x 8 @ RPE 7 | 90s rest | Full stretch at top, pull elbows to hips' },
-        { main: 'C1/C2 Superset', sub: 'C1: Single arm DB row 3x10 each | C2: DB shoulder press 3x10 @ RPE 6 | Rest 90s' },
-        { main: 'D — Face Pull', sub: '3 x 15 light | 45s rest | External rotation at top' },
-        { main: 'E — Farmer Grip Deadhangs', sub: '3 x max hold (target 30–45s) | 60s rest' }
+      id:'sb1', num:'B', name:'Upper Body — Foundation', theme:'Weeks 1–2 | Pull-Bias 3:1', duration:'48 min', rpe:7,
+      athlete:'Cole Learn',
+      flexRest:true,
+      warmup:['5 min easy row','10 banded pull-aparts + 10 scapular retractions + 10 face pulls'],
+      main:[
+        {m:'A — Barbell Row: 4 x 6 @ RPE 7', s:'Pull to lower chest, controlled lowering, hinge position', rest:'Rest: 2 min minimum — up to 2:30'},
+        {m:'B — Lat Pulldown: 4 x 8 @ RPE 7', s:'Full stretch at top, pull elbows to hips', rest:'Rest: 90s minimum'},
+        {m:'C1/C2 — Superset', s:'C1: Single arm DB row 3x10 each · C2: DB shoulder press 3x10 @ RPE 6', rest:'45s between C1 and C2 · 90s before next superset'},
+        {m:'D — Face Pull: 3 x 15 light', s:'External rotation at top, elbows high', rest:'Rest: 45s'},
+        {m:'E — Farmer grip deadhangs: 3 x max hold', s:'Target 30–45s. No kipping.', rest:'Rest: 60s minimum'}
       ],
-      finisher: [],
-      coaching: [
-        'Pull-to-press ratio 3:1. Ski erg and sled pull need it.',
-        'Deadhangs build grip endurance for farmers carry. Don\'t skip them.',
-        'Face pulls protect shoulder health across heavy ski and sled volume.'
-      ]
+      finisher:[],
+      coaching:['Pull-to-press ratio 3:1. Ski erg, sled pull, farmers carry all demand pulling strength.','Learn\'s conditioning circuits are ski and row dominant — this upper body work feeds that.','Deadhangs build the grip endurance that wins farmers carry. Non-negotiable.','Face pulls protect shoulder health across heavy ski and sled volume.']
     },
     {
-      id: 's3', num: 'A+', name: 'Lower Body — Load', theme: 'Weeks 3–4 | RPE 8',
-      duration: '55 min', rpe: 8,
-      warmup: ['5 min easy bike or row', '10 goblet squats', '10 RDLs', '10 hip bridges'],
-      main: [
-        { main: 'A — Back Squat', sub: '4 x 5 @ RPE 8 | 2.5 min rest | Heavier than weeks 1–2. Add 5kg minimum.' },
-        { main: 'B — Trap Bar Deadlift', sub: '4 x 5 @ RPE 8 | 2.5 min rest | Hip drive, lat engagement, full foot' },
-        { main: 'C1/C2 Superset', sub: 'C1: Walking lunges with DBs 3x12 each leg | C2: Farmers carry 3x60m | Rest 90s' },
-        { main: 'D — Leg Press', sub: '3 x 10 @ RPE 8 | 90s rest' },
-        { main: 'E — Nordic / Hamstring Curl', sub: '3 x 8 | 60s rest | Slow eccentric' }
+      id:'sa2', num:'A+', name:'Lower Body — Load', theme:'Weeks 3–4 | RPE 8', duration:'55 min', rpe:8,
+      athlete:'Ryan Kent',
+      flexRest:true,
+      warmup:['5 min easy bike or row','10 goblet squats + 10 RDLs + 10 hip bridges'],
+      main:[
+        {m:'A — Back Squat: 4 x 5 @ RPE 8', s:'Add minimum 5kg from weeks 1–2', rest:'Rest: 2:30 minimum — up to 3:30. Peak load week — take the full rest.'},
+        {m:'B — Trap Bar Deadlift: 4 x 5 @ RPE 8', s:'Hip drive, lat engagement, full foot contact — mirrors sled push mechanics', rest:'Rest: 2:30 minimum — up to 3:30'},
+        {m:'C1/C2 — Superset', s:'C1: Walking lunges with DBs 3x12 each leg · C2: Farmers carry 3x60m', rest:'45s between C1 and C2 · 90s–2 min before next'},
+        {m:'D — Leg Press: 3 x 10 @ RPE 8', s:'', rest:'Rest: 90s minimum'},
+        {m:'E — Nordic / Hamstring Curl: 3 x 8', s:'Slow eccentric — protect hamstrings under running volume', rest:'Rest: 60s minimum'}
       ],
-      finisher: [],
-      coaching: [
-        'Trap bar deadlift is the closest gym movement to sled push mechanics.',
-        'Walking lunges replace split squat — directly mirrors the lunge station.',
-        'Carry goes from 40m to 60m — progressive overload without changing movement.'
-      ]
+      finisher:[],
+      coaching:['Trap bar deadlift is the closest gym movement to sled push mechanics. Own it.','Train heavier than race weight — Gymshark research: builds strength reserve that makes race weight feel easy.','Walking lunges replace split squat — directly mirrors the lunge station movement.','Carry goes 40m → 60m. Progressive overload without changing the movement.']
     },
     {
-      id: 's4', num: 'B+', name: 'Upper Body — Load', theme: 'Weeks 3–4 | RPE 8',
-      duration: '55 min', rpe: 8,
-      warmup: ['5 min easy row', '10 banded pull-aparts', '10 scapular retractions', '10 face pulls'],
-      main: [
-        { main: 'A — Weighted Pull-Up', sub: '4 x 5 @ RPE 8 | 2.5 min rest | Or bodyweight with 3s lowering' },
-        { main: 'B — Barbell Row', sub: '4 x 6 @ RPE 8 | 2 min rest | Heavier than weeks 1–2' },
-        { main: 'C1/C2 Superset', sub: 'C1: Cable row 3x12 | C2: DB incline press 3x10 @ RPE 7 | Rest 90s' },
-        { main: 'D — Band Pull-Apart', sub: '3 x 20 | 30s rest | Shoulder health' },
-        { main: 'E — Farmer Grip Deadhangs', sub: '3 x max hold (target 45–60s) | 60s rest' }
+      id:'sb2', num:'B+', name:'Upper Body — Load', theme:'Weeks 3–4 | RPE 8', duration:'55 min', rpe:8,
+      athlete:'Cole Learn',
+      flexRest:true,
+      warmup:['5 min easy row','10 banded pull-aparts + 10 scapular retractions + 10 face pulls'],
+      main:[
+        {m:'A — Weighted Pull-Up: 4 x 5 @ RPE 8', s:'Bodyweight with 3s lowering if not yet weighted', rest:'Rest: 2:30 minimum — up to 3:30'},
+        {m:'B — Barbell Row: 4 x 6 @ RPE 8', s:'Heavier than weeks 1–2', rest:'Rest: 2 min minimum'},
+        {m:'C1/C2 — Superset', s:'C1: Cable row 3x12 · C2: DB incline press 3x10 @ RPE 7', rest:'45s between · 90s before next'},
+        {m:'D — Band pull-apart: 3 x 20', s:'Shoulder health maintenance', rest:'Rest: 30s'},
+        {m:'E — Farmer grip deadhangs: 3 x max hold', s:'Target 45–60s. Grip progression from weeks 1–2.', rest:'Rest: 60s minimum'}
       ],
-      finisher: [],
-      coaching: [
-        'Weighted pull-ups are the highest-value upper body exercise in this block.',
-        'Cable row keeps scapular stability high — critical for ski mechanics.',
-        'Deadhang target increases to 45–60s. This is your grip progression.'
-      ]
+      finisher:[],
+      coaching:['Weighted pull-ups are the highest-value upper body movement in this block.','Cable row keeps scapular stability high — critical for ski erg mechanics.','Deadhang target increases to 45–60s. This is your grip progression.','Take the full rest between sets in peak load weeks. Quality reps build strength.']
     },
     {
-      id: 's5', num: 'A–', name: 'Lower Body — Taper', theme: 'Weeks 5–6 | Volume drops',
-      duration: '45 min', rpe: 8,
-      warmup: ['5 min easy bike', '10 goblet squats', '10 RDLs'],
-      main: [
-        { main: 'A — Back Squat', sub: '3 x 4 @ RPE 8 | 2.5 min rest | Same weight as weeks 3–4. Sets drop to 3.' },
-        { main: 'B — Trap Bar Deadlift', sub: '3 x 4 @ RPE 8 | 2.5 min rest | Same weight, fewer sets' },
-        { main: 'C — Single Leg Press', sub: '3 x 10 each leg @ RPE 7 | 60s rest' },
-        { main: 'D — Farmers Carry', sub: '2 x 60m @ race weight — sharp and fast | 2 min rest' }
+      id:'sa3', num:'A–', name:'Lower Body — Taper', theme:'Weeks 5–6 | Volume drops 25%', duration:'45 min', rpe:8,
+      athlete:'Ryan Kent',
+      flexRest:true,
+      warmup:['5 min easy bike','10 goblet squats + 10 RDLs'],
+      main:[
+        {m:'A — Back Squat: 3 x 4 @ RPE 8', s:'Same weight as weeks 3–4. Sets drop from 4 to 3.', rest:'Rest: up to 3:30 — take the full rest'},
+        {m:'B — Trap Bar Deadlift: 3 x 4 @ RPE 8', s:'Same weight, fewer sets', rest:'Rest: up to 3:30'},
+        {m:'C — Single Leg Press: 3 x 10 each @ RPE 7', s:'', rest:'Rest: 60s'},
+        {m:'D — Farmers carry: 2 x 60m @ race weight', s:'Sharp and fast — race simulation feel', rest:'Rest: 2 min'}
       ],
-      finisher: [],
-      coaching: [
-        'Volume cut 25% but intensity stays. Maintains strength without fatigue.',
-        'Last lower session no later than Thu 25 June — 6 days out.',
-        'Carry at race speed — simulation feel, not max load.'
-      ]
+      finisher:[],
+      coaching:['Volume cut 25%. Intensity stays. This maintains strength without accumulating pre-race fatigue.','Last lower session no later than Thu 25 June — 6 days out from race.','After that session: no lower body strength until after the race.','Carry at race speed — confirmation of what you\'ve built.']
     },
     {
-      id: 's6', num: 'B–', name: 'Upper Body — Taper', theme: 'Weeks 5–6 | Stay sharp',
-      duration: '45 min', rpe: 7,
-      warmup: ['5 min easy row', '10 banded pull-aparts', '10 face pulls'],
-      main: [
-        { main: 'A — Weighted Pull-Up or Lat Pulldown', sub: '3 x 4 @ RPE 7 | 2 min rest | Slightly lighter than peak' },
-        { main: 'B — Barbell or Cable Row', sub: '3 x 6 @ RPE 7 | 90s rest' },
-        { main: 'C — Face Pull', sub: '3 x 15 | 45s rest' },
-        { main: 'D — Deadhangs', sub: '2 x max hold | 60s rest' }
+      id:'sb3', num:'B–', name:'Upper Body — Taper', theme:'Weeks 5–6 | Stay sharp', duration:'45 min', rpe:7,
+      athlete:'Cole Learn',
+      flexRest:true,
+      warmup:['5 min easy row','10 banded pull-aparts + 10 face pulls'],
+      main:[
+        {m:'A — Weighted pull-up or lat pulldown: 3 x 4 @ RPE 7', s:'Slightly lighter than peak. Move well not heavy.', rest:'Rest: up to 3 min'},
+        {m:'B — Barbell or cable row: 3 x 6 @ RPE 7', s:'', rest:'Rest: 90s'},
+        {m:'C — Face pull: 3 x 15', s:'', rest:'Rest: 45s'},
+        {m:'D — Deadhangs: 2 x max hold', s:'', rest:'Rest: 60s'}
       ],
-      finisher: [],
-      coaching: [
-        'Keep pulling muscles awake without taxing recovery.',
-        'Last upper session no later than Tue 30 June.',
-        'Move well, not heavy. You\'re staying sharp, not building.'
-      ]
+      finisher:[],
+      coaching:['Keep pulling muscles awake without taxing recovery.','Last upper session no later than Tue 30 June — day before race eve.','Move well. You\'re staying sharp, not building. The work is done.']
     }
   ]
 };
 
-// ─── SCHEDULE ────────────────────────────────────────────────────────────────
-
+// ── SCHEDULE ──────────────────────────────────────────────────────────────────
 const SCHEDULE = [
-  { week: 'WEEK 1 — 19 MAY', days: [
-    { date: 'Mon 19 May', type: 'hyrox', icon: '⚡', sessionId: 'h1', name: 'Threshold Baseline', meta: '47 min · RPE 7' },
-    { date: 'Tue 20 May', type: 'run', icon: '🏃', sessionId: 'r1', name: 'Threshold Run 1', meta: '45 min · 20 min continuous' },
-    { date: 'Wed 21 May', type: 'strength', icon: '💪', sessionId: 's1', name: 'Lower Body A', meta: '50 min · Foundation' },
-    { date: 'Thu 22 May', type: 'hyrox', icon: '⚡', sessionId: 'h2', name: 'Sled + Engine', meta: '46 min · RPE 8' },
-    { date: 'Fri 23 May', type: 'run', icon: '🏃', sessionId: 'z1', name: 'Zone 2 Run 1', meta: '45 min · Easy' },
-    { date: 'Sat 24 May', type: 'strength', icon: '💪', sessionId: 's2', name: 'Upper Body B', meta: '48 min · Pull-bias' },
+  { week:'WEEK 1 — 19 MAY', days:[
+    {date:'Mon 19 May', type:'hyrox', icon:'⚡', sid:'h1', name:'Threshold Baseline', meta:'47 min · RPE 7 · Cole Learn'},
+    {date:'Tue 20 May', type:'run', icon:'🏃', sid:'r1', name:'Threshold Run T1', meta:'45 min · 20 min continuous'},
+    {date:'Wed 21 May', type:'strength', icon:'💪', sid:'sa1', name:'Strength A — Lower', meta:'50 min · Foundation RPE 7'},
+    {date:'Thu 22 May', type:'hyrox', icon:'⚡', sid:'h2', name:'Sled + Engine', meta:'46 min · RPE 8 · Dearden'},
+    {date:'Fri 23 May', type:'run', icon:'🏃', sid:'z1', name:'Zone 2 Run Z1', meta:'45 min · Easy aerobic'},
+    {date:'Sat 24 May', type:'strength', icon:'💪', sid:'sb1', name:'Strength B — Upper', meta:'48 min · Pull-bias RPE 7'},
   ]},
-  { week: 'WEEK 2 — 25 MAY', days: [
-    { date: 'Mon 25 May', type: 'hyrox', icon: '⚡', sessionId: 'h3', name: 'Compromised Running', meta: '48 min · RPE 8' },
-    { date: 'Tue 26 May', type: 'run', icon: '🏃', sessionId: 'r2', name: 'Threshold Run 2', meta: '45 min · 3x8 min' },
-    { date: 'Wed 27 May', type: 'strength', icon: '💪', sessionId: 's1', name: 'Lower Body A', meta: '50 min · Foundation' },
-    { date: 'Thu 28 May', type: 'hyrox', icon: '⚡', sessionId: 'h4', name: 'Aerobic Density', meta: '45 min · RPE 6' },
-    { date: 'Fri 29 May', type: 'run', icon: '🏃', sessionId: 'z2', name: 'Zone 2 Run 2', meta: '48 min · Easy' },
-    { date: 'Sat 30 May', type: 'strength', icon: '💪', sessionId: 's2', name: 'Upper Body B', meta: '48 min · Pull-bias' },
+  { week:'WEEK 2 — 25 MAY', days:[
+    {date:'Mon 25 May', type:'hyrox', icon:'⚡', sid:'h3', name:'Compromised Running', meta:'48 min · RPE 8 · Dearden'},
+    {date:'Tue 26 May', type:'run', icon:'🏃', sid:'r2', name:'Threshold Run T2', meta:'45 min · 3x8 min'},
+    {date:'Wed 27 May', type:'strength', icon:'💪', sid:'sa1', name:'Strength A — Lower', meta:'50 min · Add small weight'},
+    {date:'Thu 28 May', type:'hyrox', icon:'⚡', sid:'h4', name:'Aerobic Density', meta:'45 min · RPE 6 · Rončević'},
+    {date:'Fri 29 May', type:'run', icon:'🏃', sid:'z2', name:'Zone 2 Run Z2', meta:'48 min · Tempo finish'},
+    {date:'Sat 30 May', type:'strength', icon:'💪', sid:'sb1', name:'Strength B — Upper', meta:'48 min · Add small load'},
   ]},
-  { week: 'WEEK 3 — 1 JUN', days: [
-    { date: 'Mon 1 Jun', type: 'hyrox', icon: '⚡', sessionId: 'h5', name: 'Roxzone Assault', meta: '47 min · RPE 7' },
-    { date: 'Tue 2 Jun', type: 'run', icon: '🏃', sessionId: 'r3', name: 'Threshold Run 3', meta: '47 min · 25 min continuous' },
-    { date: 'Wed 3 Jun', type: 'strength', icon: '💪', sessionId: 's3', name: 'Lower Body A+', meta: '55 min · Load phase' },
-    { date: 'Thu 4 Jun', type: 'hyrox', icon: '⚡', sessionId: 'h6', name: 'Sled Loading Block', meta: '46 min · RPE 8' },
-    { date: 'Fri 5 Jun', type: 'run', icon: '🏃', sessionId: 'z3', name: 'Zone 2 + Strides', meta: '50 min · 6 strides' },
-    { date: 'Sat 6 Jun', type: 'strength', icon: '💪', sessionId: 's4', name: 'Upper Body B+', meta: '55 min · Load phase' },
+  { week:'WEEK 3 — 1 JUN', days:[
+    {date:'Mon 1 Jun', type:'hyrox', icon:'⚡', sid:'h5', name:'Roxzone Assault', meta:'47 min · RPE 7 · Kent'},
+    {date:'Tue 2 Jun', type:'run', icon:'🏃', sid:'r3', name:'Threshold Run T3', meta:'47 min · 25 min continuous'},
+    {date:'Wed 3 Jun', type:'strength', icon:'💪', sid:'sa2', name:'Strength A+ — Lower Load', meta:'55 min · RPE 8 · Load phase'},
+    {date:'Thu 4 Jun', type:'hyrox', icon:'⚡', sid:'h6', name:'Sled Loading Block', meta:'46 min · RPE 8 · Overload'},
+    {date:'Fri 5 Jun', type:'run', icon:'🏃', sid:'z3', name:'Zone 2 + Strides Z3', meta:'50 min · 6 strides'},
+    {date:'Sat 6 Jun', type:'strength', icon:'💪', sid:'sb2', name:'Strength B+ — Upper Load', meta:'55 min · RPE 8'},
   ]},
-  { week: 'WEEK 4 — 8 JUN', days: [
-    { date: 'Mon 8 Jun', type: 'hyrox', icon: '⚡', sessionId: 'h7', name: 'Threshold Intervals', meta: '48 min · RPE 8' },
-    { date: 'Tue 9 Jun', type: 'run', icon: '🏃', sessionId: 'r4', name: 'VO2 Max Intervals', meta: '46 min · 5x4 min' },
-    { date: 'Wed 10 Jun', type: 'strength', icon: '💪', sessionId: 's3', name: 'Lower Body A+', meta: '55 min · Peak load' },
-    { date: 'Thu 11 Jun', type: 'hyrox', icon: '⚡', sessionId: 'h8', name: 'Farmers Carry + Run', meta: '47 min · RPE 7' },
-    { date: 'Fri 12 Jun', type: 'run', icon: '🏃', sessionId: 'z4', name: 'Zone 2 + Strides', meta: '50 min · 8 strides' },
-    { date: 'Sat 13 Jun', type: 'strength', icon: '💪', sessionId: 's4', name: 'Upper Body B+', meta: '55 min · Peak load' },
+  { week:'WEEK 4 — 8 JUN', days:[
+    {date:'Mon 8 Jun', type:'hyrox', icon:'⚡', sid:'h7', name:'Threshold Intervals', meta:'48 min · RPE 8 · Learn'},
+    {date:'Tue 9 Jun', type:'run', icon:'🏃', sid:'r4', name:'VO2 Max Intervals T4', meta:'46 min · 5x4 min hard'},
+    {date:'Wed 10 Jun', type:'strength', icon:'💪', sid:'sa2', name:'Strength A+ — Peak Load', meta:'55 min · Same weight or +2.5kg'},
+    {date:'Thu 11 Jun', type:'hyrox', icon:'⚡', sid:'h8', name:'Farmers Carry + Run', meta:'47 min · RPE 7 · Kent'},
+    {date:'Fri 12 Jun', type:'run', icon:'🏃', sid:'z4', name:'Zone 2 + Strides Z4', meta:'50 min · 8 strides'},
+    {date:'Sat 13 Jun', type:'strength', icon:'💪', sid:'sb2', name:'Strength B+ — Peak Load', meta:'55 min · Same weight or +small'},
   ]},
-  { week: 'WEEK 5 — 15 JUN', days: [
-    { date: 'Mon 15 Jun', type: 'hyrox', icon: '⚡', sessionId: 'h9', name: 'BBJ Mastery', meta: '46 min · RPE 7' },
-    { date: 'Tue 16 Jun', type: 'run', icon: '🏃', sessionId: 'r5', name: 'Benchmark Run', meta: '45 min · Compare to T1' },
-    { date: 'Wed 17 Jun', type: 'strength', icon: '💪', sessionId: 's5', name: 'Lower Body A–', meta: '45 min · Taper' },
-    { date: 'Thu 18 Jun', type: 'hyrox', icon: '⚡', sessionId: 'h10', name: 'Race Rehearsal', meta: '50 min · RPE 9' },
-    { date: 'Fri 19 Jun', type: 'run', icon: '🏃', sessionId: 'z5', name: 'Easy Recovery Run', meta: '40 min · Taper' },
-    { date: 'Sat 20 Jun', type: 'strength', icon: '💪', sessionId: 's6', name: 'Upper Body B–', meta: '45 min · Taper' },
+  { week:'WEEK 5 — 15 JUN', days:[
+    {date:'Mon 15 Jun', type:'hyrox', icon:'⚡', sid:'h9', name:'BBJ Mastery', meta:'46 min · RPE 7 · Learn'},
+    {date:'Tue 16 Jun', type:'run', icon:'🏃', sid:'r5', name:'Benchmark Run T5', meta:'45 min · Compare to T1'},
+    {date:'Wed 17 Jun', type:'strength', icon:'💪', sid:'sa3', name:'Strength A– — Lower Taper', meta:'45 min · Volume drops 25%'},
+    {date:'Thu 18 Jun', type:'hyrox', icon:'⚡', sid:'h10', name:'Race Rehearsal', meta:'50 min · RPE 9 · Dearden'},
+    {date:'Fri 19 Jun', type:'run', icon:'🏃', sid:'z5', name:'Easy Recovery Run Z5', meta:'40 min · Taper begins'},
+    {date:'Sat 20 Jun', type:'strength', icon:'💪', sid:'sb3', name:'Strength B– — Upper Taper', meta:'45 min · RPE 7'},
   ]},
-  { week: 'WEEK 6 — 22 JUN', days: [
-    { date: 'Mon 22 Jun', type: 'hyrox', icon: '⚡', sessionId: 'h11', name: 'Full Race Simulation', meta: '50 min · RPE 9' },
-    { date: 'Tue 23 Jun', type: 'run', icon: '🏃', sessionId: 'r6', name: 'Short Sharp Threshold', meta: '40 min · 2x8 min' },
-    { date: 'Thu 25 Jun', type: 'hyrox', icon: '⚡', sessionId: 'h12', name: 'Race Day Sharpener', meta: '45 min · RPE 7' },
-    { date: 'Fri 26 Jun', type: 'run', icon: '🏃', sessionId: 'z6', name: 'Final Easy Run', meta: '30 min · Last one' },
+  { week:'WEEK 6 — 22 JUN', days:[
+    {date:'Mon 22 Jun', type:'hyrox', icon:'⚡', sid:'h11', name:'Full Race Simulation', meta:'50 min · RPE 9 · All athletes'},
+    {date:'Tue 23 Jun', type:'run', icon:'🏃', sid:'r6', name:'Short Sharp Threshold T6', meta:'40 min · 2x8 min'},
+    {date:'Thu 25 Jun', type:'hyrox', icon:'⚡', sid:'h12', name:'Race Day Sharpener', meta:'45 min · RPE 7 · Last session'},
+    {date:'Fri 26 Jun', type:'run', icon:'🏃', sid:'z6', name:'Final Easy Run Z6', meta:'30 min · Last run'},
   ]},
-  { week: 'RACE WEEK — 29 JUN', days: [
-    { date: 'Mon 29 Jun', type: 'run', icon: '🏃', sessionId: null, name: '20 min easy jog + 4 strides', meta: 'Nothing more' },
-    { date: 'Tue 30 Jun', type: 'rest', icon: '😴', sessionId: null, name: 'Rest', meta: 'Stay off your feet' },
-    { date: 'Wed 1 Jul', type: 'hyrox', icon: '🏁', sessionId: null, name: 'RACE DAY', meta: 'HYROX Doubles · Sub-1:05' },
+  { week:'RACE WEEK — 29 JUN', days:[
+    {date:'Mon 29 Jun', type:'run', icon:'🏃', sid:null, name:'20 min easy jog + 4 strides', meta:'Nothing more'},
+    {date:'Tue 30 Jun', type:'rest', icon:'😴', sid:null, name:'Rest', meta:'Stay off your feet'},
+    {date:'Wed 1 Jul', type:'race', icon:'🏁', sid:null, name:'RACE DAY', meta:'HYROX Doubles · Sub-1:05'},
   ]}
 ];
 
-// ─── STATE ───────────────────────────────────────────────────────────────────
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let completed = JSON.parse(localStorage.getItem('hx_done') || '[]');
 
-let completed = JSON.parse(localStorage.getItem('hyrox_completed') || '[]');
-
-function toggleComplete(cardEl, scheduleId) {
-  if (completed.includes(scheduleId)) {
-    completed = completed.filter(x => x !== scheduleId);
-    cardEl.classList.remove('done');
+function toggleDone(card, id) {
+  if (!id) return;
+  if (completed.includes(id)) {
+    completed = completed.filter(x => x !== id);
+    card.classList.remove('done');
   } else {
-    completed.push(scheduleId);
-    cardEl.classList.add('done');
+    completed.push(id);
+    card.classList.add('done');
   }
-  localStorage.setItem('hyrox_completed', JSON.stringify(completed));
+  localStorage.setItem('hx_done', JSON.stringify(completed));
   updateProgress();
 }
 
 function updateProgress() {
-  const total = SCHEDULE.flatMap(w => w.days).filter(d => d.sessionId && d.type !== 'rest').length;
+  const total = SCHEDULE.flatMap(w => w.days).filter(d => d.sid && d.type !== 'rest').length;
   const done = completed.length;
-  document.getElementById('progress-count').textContent = `${done} / ${total}`;
-  document.getElementById('progress-fill').style.width = `${(done/total)*100}%`;
+  document.getElementById('prog-count').textContent = `${done} / ${total}`;
+  document.getElementById('prog-fill').style.width = `${(done/total)*100}%`;
 }
 
-// ─── RENDER SCHEDULE ─────────────────────────────────────────────────────────
-
+// ── RENDER SCHEDULE ───────────────────────────────────────────────────────────
 function renderSchedule() {
   const list = document.getElementById('schedule-list');
   list.innerHTML = '';
-
   SCHEDULE.forEach(week => {
-    const weekEl = document.createElement('div');
-    weekEl.className = 'week-block';
-
-    const label = document.createElement('div');
-    label.className = 'week-label';
-    label.textContent = week.week;
-    weekEl.appendChild(label);
-
+    const wl = document.createElement('div');
+    wl.className = 'week-label';
+    wl.textContent = week.week;
+    list.appendChild(wl);
     week.days.forEach((day, di) => {
-      const scheduleId = `${week.week}-${di}`;
+      const uid = `${week.week}-${di}`;
       const card = document.createElement('div');
-      card.className = `session-card ${day.type}${completed.includes(scheduleId) ? ' done' : ''}`;
-
-      card.innerHTML = `
-        <div class="session-dot ${day.type}">${day.icon}</div>
-        <div class="session-info">
-          <div class="session-day">${day.date}</div>
-          <div class="session-name">${day.name}</div>
-          <div class="session-meta">${day.meta}</div>
-        </div>
-        <div class="session-check">${completed.includes(scheduleId) ? '✓' : ''}</div>
-      `;
-
-      const check = card.querySelector('.session-check');
-      check.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (day.type !== 'rest') toggleComplete(card, scheduleId);
-      });
-
-      if (day.sessionId) {
-        card.addEventListener('click', () => openSessionById(day.sessionId));
-      }
-
-      weekEl.appendChild(card);
+      card.className = `session-card ${day.type}${completed.includes(uid) ? ' done' : ''}`;
+      card.innerHTML = `<div class="s-dot ${day.type}">${day.icon}</div><div class="s-info"><div class="s-day">${day.date}</div><div class="s-name">${day.name}</div><div class="s-meta">${day.meta}</div></div><div class="s-check">${completed.includes(uid) ? '✓' : ''}</div>`;
+      card.querySelector('.s-check').addEventListener('click', e => { e.stopPropagation(); toggleDone(card, uid); });
+      if (day.sid) card.addEventListener('click', () => openById(day.sid));
+      list.appendChild(card);
     });
-
-    list.appendChild(weekEl);
   });
-
   updateProgress();
 }
 
-// ─── RENDER SESSIONS LIST ─────────────────────────────────────────────────────
-
+// ── RENDER SESSIONS LIST ──────────────────────────────────────────────────────
 function renderSessionsList() {
   const list = document.getElementById('sessions-list');
   list.innerHTML = '';
-
-  const sections = [
-    { label: 'HYROX Sessions', type: 'hyrox', data: SESSIONS.hyrox },
-    { label: 'Running Sessions', type: 'run', data: SESSIONS.run },
-    { label: 'Strength Sessions', type: 'strength', data: SESSIONS.strength },
+  const cats = [
+    {label:'HYROX Sessions', type:'hyrox', data:SESSIONS.hyrox},
+    {label:'Running Sessions', type:'run', data:SESSIONS.run},
+    {label:'Strength Sessions', type:'strength', data:SESSIONS.strength}
   ];
-
-  sections.forEach(sec => {
-    const header = document.createElement('div');
-    header.className = `session-type-header ${sec.type}`;
-    header.textContent = sec.label;
-    list.appendChild(header);
-
-    sec.data.forEach(session => {
+  cats.forEach(cat => {
+    const h = document.createElement('div');
+    h.className = `cat-header ${cat.type}`;
+    h.textContent = cat.label;
+    list.appendChild(h);
+    cat.data.forEach(s => {
       const card = document.createElement('div');
-      card.className = 'session-list-card';
-      card.innerHTML = `
-        <div class="session-num ${sec.type}">${session.num}</div>
-        <div class="session-list-info">
-          <div class="session-list-name">${session.name}</div>
-          <div class="session-list-theme">${session.theme} · ${session.duration}</div>
-        </div>
-        <div class="chevron">›</div>
-      `;
-      card.addEventListener('click', () => openSession(session, sec.type));
+      card.className = 's-list-card';
+      card.innerHTML = `<div class="s-num ${cat.type}">${s.num}</div><div class="s-list-info"><div class="s-list-name">${s.name}</div><div class="s-list-theme">${s.theme} · ${s.duration}</div></div><div class="chevron">›</div>`;
+      card.addEventListener('click', () => openSession(s, cat.type));
       list.appendChild(card);
     });
   });
 }
 
-// ─── MODAL ───────────────────────────────────────────────────────────────────
-
-function openSessionById(id) {
-  const all = [...SESSIONS.hyrox, ...SESSIONS.run, ...SESSIONS.strength];
-  const session = all.find(s => s.id === id);
-  if (!session) return;
-  const type = SESSIONS.hyrox.includes(session) ? 'hyrox' : SESSIONS.run.includes(session) ? 'run' : 'strength';
-  openSession(session, type);
+// ── RENDER ATHLETES ───────────────────────────────────────────────────────────
+function renderAthletes() {
+  const list = document.getElementById('athlete-list');
+  list.innerHTML = '';
+  ATHLETES.forEach(a => {
+    const card = document.createElement('div');
+    card.className = 'athlete-card';
+    card.innerHTML = `<div class="ath-name">${a.name}</div><div class="ath-title">${a.title}</div>${a.principles.map(p => `<div class="ath-principle">→ ${p}</div>`).join('')}`;
+    list.appendChild(card);
+  });
 }
 
-function openSession(session, type) {
-  const typeLabels = { hyrox: 'HYROX', run: 'RUNNING', strength: 'STRENGTH' };
-  document.getElementById('modal-type').className = `modal-type ${type}`;
-  document.getElementById('modal-type').textContent = typeLabels[type];
-  document.getElementById('modal-title').textContent = session.name;
+// ── RACE ORDER ────────────────────────────────────────────────────────────────
+function renderRaceOrder() {
+  const el = document.getElementById('race-order');
+  el.innerHTML = '';
+  RACE_ORDER.forEach((s, i) => {
+    if (i > 0) { const l = document.createElement('div'); l.className = 'order-line'; el.appendChild(l); }
+    const row = document.createElement('div');
+    row.className = 'order-row';
+    row.innerHTML = `<div class="order-n">${i+1}</div><div class="order-s">${s}</div>`;
+    el.appendChild(row);
+  });
+}
 
-  const chips = document.getElementById('modal-chips');
-  chips.innerHTML = `
-    <span class="chip">${session.duration}</span>
-    <span class="chip">RPE ${session.rpe}/10</span>
-    <span class="chip">${session.theme}</span>
-  `;
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+function openById(id) {
+  const all = [...SESSIONS.hyrox, ...SESSIONS.run, ...SESSIONS.strength];
+  const s = all.find(x => x.id === id);
+  if (!s) return;
+  const type = SESSIONS.hyrox.includes(s) ? 'hyrox' : SESSIONS.run.includes(s) ? 'run' : 'strength';
+  openSession(s, type);
+}
 
-  const rpeHtml = `
-    <div class="rpe-badge">
-      <span class="rpe-label">RPE</span>
-      <div class="rpe-dots">
-        ${Array.from({length:10},(_,i)=>`<div class="rpe-dot ${i<session.rpe?'filled':''}"></div>`).join('')}
-      </div>
-      <span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;color:var(--accent)">${session.rpe}/10</span>
-    </div>
-  `;
+function openSession(s, type) {
+  const labels = {hyrox:'HYROX SESSION', run:'RUNNING SESSION', strength:'STRENGTH SESSION'};
+  document.getElementById('m-type').className = `modal-type ${type}`;
+  document.getElementById('m-type').textContent = labels[type];
+  document.getElementById('m-title').textContent = s.name;
+  document.getElementById('m-chips').innerHTML = `<span class="chip">${s.duration}</span><span class="chip">RPE ${s.rpe}/10</span><span class="chip">${s.theme}</span>`;
 
-  let bodyHtml = rpeHtml;
+  let html = '';
 
-  if (session.warmup && session.warmup.length > 0) {
-    bodyHtml += `<div class="section"><div class="section-label">Warm-Up</div>`;
-    session.warmup.forEach(w => {
-      bodyHtml += `<div class="block-item"><div class="block-item-main">${w}</div></div>`;
-    });
-    bodyHtml += `</div>`;
+  // RPE dots
+  html += `<div class="rpe-row"><span class="rpe-lbl">RPE</span><div class="rpe-dots">${Array.from({length:10},(_,i)=>`<div class="rpe-dot ${i<s.rpe?'on':''}"></div>`).join('')}</div><span class="rpe-num">${s.rpe}/10</span></div>`;
+
+  // Athlete tag
+  if (s.athlete) html += `<div class="athlete-tag">📖 Inspired by: ${s.athlete}</div>`;
+
+  // Flex rest note
+  if (s.flexRest) html += `<div class="flex-rest-note">⏱ FLEXIBLE REST SESSION — Rest periods are minimums not maximums. Take what you need to maintain quality. Movement quality matters more than the clock.</div>`;
+
+  // Warmup
+  if (s.warmup && s.warmup.length) {
+    html += `<div class="sec-label">Warm-Up</div>`;
+    s.warmup.forEach(w => html += `<div class="block-item"><div class="block-main">${w}</div></div>`);
   }
 
-  if (session.main && session.main.length > 0) {
-    bodyHtml += `<div class="section"><div class="section-label">Main Block</div>`;
-    session.main.forEach(m => {
-      bodyHtml += `<div class="block-item">
-        <div class="block-item-main">${m.main}</div>
-        ${m.sub ? `<div class="block-item-sub">${m.sub}</div>` : ''}
-      </div>`;
+  // Main
+  if (s.main && s.main.length) {
+    html += `<div class="sec-label">Main Block</div>`;
+    s.main.forEach(m => {
+      html += `<div class="block-item"><div class="block-main">${m.m}</div>${m.s ? `<div class="block-sub">${m.s}</div>` : ''}${m.rest ? `<div class="block-rest">${m.rest}</div>` : ''}</div>`;
     });
-    bodyHtml += `</div>`;
   }
 
-  if (session.finisher && session.finisher.length > 0) {
-    bodyHtml += `<div class="section"><div class="section-label">Finisher</div>`;
-    session.finisher.forEach(f => {
-      bodyHtml += `<div class="block-item"><div class="block-item-main">${f}</div></div>`;
-    });
-    bodyHtml += `</div>`;
+  // Finisher
+  if (s.finisher && s.finisher.length) {
+    html += `<div class="sec-label">Finisher</div>`;
+    s.finisher.forEach(f => html += `<div class="block-item"><div class="block-main">${f}</div></div>`);
   }
 
-  if (session.coaching && session.coaching.length > 0) {
-    bodyHtml += `<div class="section"><div class="section-label">Coaching</div>`;
-    session.coaching.forEach(c => {
-      bodyHtml += `<div class="coaching-item"><span class="coaching-arrow">→</span><span>${c}</span></div>`;
-    });
-    bodyHtml += `</div>`;
+  // Coaching
+  if (s.coaching && s.coaching.length) {
+    html += `<div class="sec-label">Coaching</div>`;
+    s.coaching.forEach(c => html += `<div class="coaching-item"><span class="coaching-arrow">→</span><span>${c}</span></div>`);
   }
 
-  document.getElementById('modal-body').innerHTML = bodyHtml;
+  document.getElementById('m-body').innerHTML = html;
   document.getElementById('modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
-function closeModal(e) {
-  if (e.target === document.getElementById('modal')) closeModalBtn();
-}
-
-function closeModalBtn() {
+function closeModal() {
   document.getElementById('modal').classList.remove('open');
   document.body.style.overflow = '';
 }
 
-// ─── RACE ORDER ──────────────────────────────────────────────────────────────
-
-function renderRaceOrder() {
-  const el = document.getElementById('race-order');
-  el.innerHTML = '';
-  RACE_ORDER.forEach((station, i) => {
-    if (i > 0) {
-      const connector = document.createElement('div');
-      connector.className = 'order-connector';
-      connector.style.marginLeft = '10px';
-      el.appendChild(connector);
-    }
-    const item = document.createElement('div');
-    item.className = 'race-order-item';
-    item.innerHTML = `
-      <div class="order-num">${i+1}</div>
-      <div class="order-station">${station}</div>
-    `;
-    el.appendChild(item);
-  });
+function closeModalBg(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
 }
 
-// ─── COUNTDOWN ───────────────────────────────────────────────────────────────
-
-function updateCountdown() {
-  const race = new Date('2026-07-01T00:00:00');
-  const now = new Date();
-  const diff = Math.ceil((race - now) / (1000*60*60*24));
-  document.getElementById('days-left').textContent = diff > 0 ? diff : 'RACE DAY';
-}
-
-// ─── NAVIGATION ──────────────────────────────────────────────────────────────
-
+// ── NAV ───────────────────────────────────────────────────────────────────────
 function showPage(id, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1698,10 +945,16 @@ function showPage(id, btn) {
   btn.classList.add('active');
 }
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
+// ── COUNTDOWN ─────────────────────────────────────────────────────────────────
+function updateCountdown() {
+  const diff = Math.ceil((new Date('2026-07-01') - new Date()) / 86400000);
+  document.getElementById('days-left').textContent = diff > 0 ? diff : 'RACE DAY';
+}
 
+// ── INIT ──────────────────────────────────────────────────────────────────────
 renderSchedule();
 renderSessionsList();
+renderAthletes();
 renderRaceOrder();
 updateCountdown();
 </script>
